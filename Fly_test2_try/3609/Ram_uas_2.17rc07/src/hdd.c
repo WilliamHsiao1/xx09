@@ -55,13 +55,13 @@ bit hdd_set_uas_xfer_len()
 		return 1;
 	}
 exit:
-DBG(("uas %x ", byteCnt));
+//DBG(("uas %x ", byteCnt));
 	*ctxt_XferLen_0 = byteCnt;
 	*ctxt_XferLen_1 = byteCnt >> 8;
 	*ctxt_XferLen_2 = 0;
 	*ctxt_XferLen_3 = 0;
 
-DBG(("%bx%bx\n", *ctxt_XferLen_1, *ctxt_XferLen_0));
+//DBG(("%bx%bx\n", *ctxt_XferLen_1, *ctxt_XferLen_0));
 
 	return 0;
 
@@ -141,7 +141,7 @@ void hdd_ata_err_2_sense_data()
 		val = ctxt_FIS[FIS_ERROR];
 		if (val & ATA_ERR_ICRC)  //interface CRC error has occurred
 		{
-			DBG(("S CRC %bx\n", ctxt_CDB[0]));
+			//DBG(("S CRC %bx\n", ctxt_CDB[0]));
 #ifdef EQ_SETTING_TEST
 			if(sobj_crc_count < 0xFF)
 				sobj_crc_count++;
@@ -220,7 +220,7 @@ void hdd_ata_return_tfr()
 \****************************************/
 void hdd_format_unit_cmd()
 {
-	DBG(("FMT %BX\n", CmdBlk(1)));
+	//DBG(("FMT %BX\n", CmdBlk(1)));
 	if (CmdBlk(1))
 	{	//we don't accept a parameter list.
 		hdd_err_2_sense_data(ERROR_ILL_CDB);
@@ -382,7 +382,7 @@ void hdd_inquiry_cmd()
 //	CmdBlk(3) = ctxt_CDB[3];
 //	CmdBlk(4) = ctxt_CDB[4];
 //	CmdBlk(5) = ctxt_CDB[5];
-	DBG(("Inq\n"));
+	//DBG(("Inq\n"));
 		xmemset(mc_buffer, 0x00, 76);
 
 		// check EVPD bit ? 
@@ -440,7 +440,7 @@ void hdd_inquiry_cmd()
 				else
 				{
 					*dbuf_MuxSel = 0;
-					DBG(("\tInq %BX\n", *dbuf_MuxInOut));
+					//DBG(("\tInq %BX\n", *dbuf_MuxInOut));
 					timerCnt = 100;			// 10 sec
 				}
 			#endif
@@ -661,7 +661,7 @@ invalid_CDB_field:
 
 bit hdd_chk_short_block_descriptor(void)
 {
-	DBG(("c s B D %BX\n", pU8[6]));
+	//DBG(("c s B D %BX\n", pU8[6]));
 	// Bytes 5..7 is the Logical Block Length.
 	if (pU8[5] || pU8[7])
 		return 1;
@@ -693,7 +693,7 @@ bit hdd_chk_short_block_descriptor(void)
 		}
 	#endif
 #endif
-	DBG(("G s B De\n"));
+	//DBG(("G s B De\n"));
 	return 0;
 }
 
@@ -731,7 +731,7 @@ bit hdd_chk_long_block_descriptor(void)
 		}
 	#endif
 #endif
-	DBG(("G l B De\n"));
+	//DBG(("G l B De\n"));
 	return 0;
 }
 
@@ -743,7 +743,7 @@ void hdd_mode_select_cmd(void)
 //		return;
 //	}
 	sz16 = *((u16 *)(&CmdBlk[7]));
-	DBG(("MS %bx %x\n", CmdBlk[0], sz16));
+	//DBG(("MS %bx %x\n", CmdBlk[0], sz16));
 	if (CmdBlk[0] == SCSI_MODE_SELECT6)
 	{
 		// parameter list should have "Mode Parameter Header"
@@ -836,7 +836,7 @@ void hdd_mode_select_cmd(void)
 	// Parse "Mode Parameter Page"
 	//
 parse_mode_parameter_data:
-DBG(("Page %bx\n", *pU8));
+//DBG(("Page %bx\n", *pU8));
 	if (sz16  > 0)
 	{
 		switch (*pU8 & MODE_PAGE_CODE_MASK)
@@ -851,14 +851,14 @@ DBG(("Page %bx\n", *pU8));
 			// at least 3 bytes of Caching Mode Page.
 			if (sz16 < 03)
 			{
-				DBG(("Size %x\n", sz16));
+				//DBG(("Size %x\n", sz16));
 				goto invalid_param_field;
 			}
 
 			// Check the Page Length field.
 			if (pU8[1] < 1)
 			{
-				DBG(("Page Length %bx\n", pU8[1]));
+				//DBG(("Page Length %bx\n", pU8[1]));
 				goto invalid_param_field;
 			}
 
@@ -1146,7 +1146,7 @@ void hdd_rd_buffer_cmd()
 					//InitioReadInquiry - start		BUFFER OFFSET == 0x000000
 					*(mc_buffer + 0) = globalNvram.ModelId[0];
 					*(mc_buffer + 1) = globalNvram.ModelId[1];
-                    DBG0(("~globalNvram.ModelId[0] = %x\n",globalNvram.ModelId[0]));
+                    //DBG0(("~globalNvram.ModelId[0] = %x\n",globalNvram.ModelId[0]));
 					*(mc_buffer + 2) = NV_VERSION(0);
 					*(mc_buffer + 3) = NV_VERSION(1);
 
@@ -1687,7 +1687,7 @@ bit hdd_odd_scsi_downlod_fw(void)
 			sflash_get_type();
 			if (sflash_type == UNKNOWN_FLASH)
 			{
-				DBG(("unknow flash\n"));
+				//DBG(("unknow flash\n"));
 				hdd_err_2_sense_data(ERROR_ILL_PARAM);
 				usb_device_no_data();
 				return 1;
@@ -1696,7 +1696,7 @@ bit hdd_odd_scsi_downlod_fw(void)
 
 		if (FW_Download != FW_DOWNLOAD_PROECESSING)
 		{
-			DBG(("start download\n"));
+			//DBG(("start download\n"));
 			FW_Download = FW_DOWNLOAD_PROECESSING;
 
 			sflash_erase_chip();
@@ -1711,7 +1711,7 @@ bit hdd_odd_scsi_downlod_fw(void)
 
 		if (flash_addr_low == 0xFF) // downlaod 0xFFFFh bta file
 		{
-			DBG(("download end\n"));
+			//DBG(("download end\n"));
 			FW_Download = FW_DOWNLOAD_SUCCESS;				
 		}
 		return 1;
@@ -1814,7 +1814,7 @@ ata_pass_thru:
 
 #define   protocol	tmp8
 		protocol = CmdBlk(1) & 0x1E;
-		DBG(("protocol %bx\n", protocol));
+		//DBG(("protocol %bx\n", protocol));
 		if ((protocol) == (0 << 1))			// ATA Hard Reset
 		{
 			//sata_Reset(SATA_HARD_RST);
@@ -1899,7 +1899,7 @@ ata_pass_thru:
 				// set case 6		
 				*ctxt_PhaseCase_0 = 0x40;
 				//*ctxt_PhaseCase_1 = 0x00;
-				DBG(("PIO-IN %bx%bx\n", *ctxt_PhaseCase_1, *ctxt_PhaseCase_0));
+				//DBG(("PIO-IN %bx%bx\n", *ctxt_PhaseCase_1, *ctxt_PhaseCase_0));
 
 			}
 		#ifdef UAS_EN
@@ -1999,7 +1999,7 @@ ata_pass_thru:
 				// set case 6		
 				*ctxt_PhaseCase_0 = 0x40;
 				//*ctxt_PhaseCase_1 = 0x00;
-				DBG(("PIO-IN %bx%bx\n", *ctxt_PhaseCase_1, *ctxt_PhaseCase_0));
+				//DBG(("PIO-IN %bx%bx\n", *ctxt_PhaseCase_1, *ctxt_PhaseCase_0));
 
 			}
 		#ifdef UAS_EN
@@ -2094,7 +2094,7 @@ ata_pass_thru:
 		else
 		{
 
-			DBG(("Bad protocol\n"));
+			//DBG(("Bad protocol\n"));
 #ifdef UAS_EN
 invalid_cdb:
 #endif
@@ -2212,7 +2212,7 @@ invalid_cdb:
 	\****************************************/
 	case SCSI_READ_CAPACITY:
 
-		DBG(("Rd Cap %bx\n", sobj_State));
+		//DBG(("Rd Cap %bx\n", sobj_State));
 	#if 1
 		if (hdd_chk_drv_init())
 		{
@@ -2293,7 +2293,7 @@ invalid_cdb:
 #endif
 		xmemset(mc_buffer, 0, 32);
 		
-		DBG(("Read Capacity 16\n"));
+		//DBG(("Read Capacity 16\n"));
 		
 		if (sobj_sector_4K)  // logical 4k only
 		{
@@ -2529,7 +2529,7 @@ _verify10:
 				(CmdBlk(10) == 0x25) &&
 				(CmdBlk(11) == 0xc9))
 			{
-				DBG(("TUR %BX\n", sobj_State));
+				//DBG(("TUR %BX\n", sobj_State));
 				usb_device_data_out();
 				return;
 	
@@ -2609,7 +2609,7 @@ _verify10:
 		SCSI_TEST_UNIT_READY
 	\****************************************/
 	case SCSI_TEST_UNIT_READY:
-		DBG(("TUR %BX\n", sobj_State));
+		//DBG(("TUR %BX\n", sobj_State));
 	//#ifdef USB_FAST_ENUM
 	#ifdef UAS_EN
 		if (!bot_mode)
@@ -2801,7 +2801,7 @@ spin_down:
 				return;
 
 			case 1: //start
-				DBG(("STA HD\n"));
+				//DBG(("STA HD\n"));
 //dev_Active:
 				//powerStatus = PWR_STATUS_ACTIVE;
 
@@ -2814,10 +2814,10 @@ spin_up:
 	#endif
 
 
-				DBG(("Spin Up\n"));
+				//DBG(("Spin Up\n"));
 				if (sobj_State >= SATA_READY)
 				{
-					DBG(("(spin Ignore)\n"));
+					//DBG(("(spin Ignore)\n"));
 					//SCTXT_Status = CTXT_STATUS_GOOD;
 					usb_device_no_data();
 					return;
@@ -3031,7 +3031,7 @@ void hdd_post_data_out()
 			(CmdBlk(10) == 0x25) &&
 			(CmdBlk(11) == 0xc9))
 		{
-			DBG(("w r download 1\n"));
+			//DBG(("w r download 1\n"));
 			hdd_odd_scsi_downlod_fw();
 			break;
 		}
@@ -3296,7 +3296,7 @@ void hdd_tick_isr()
 
 				if (ata_ExecNoDataCmd(ATA6_STANDBY_IMMEDIATE, 0) != CTXT_STATUS_ERROR)
 				{
-					//DBG(("HDD STB\n"));
+					DBG(("HDD STB\n"));
 					hdd_standby_tick = 0;
 					sobj_State = SATA_STANDBY;
 					//hdd_standby_counter = 0;
@@ -3362,14 +3362,14 @@ void hdd_tick_isr()
 				{
 					if (sobj_init)
 					{
-						DBG(("A S_init RST TO\n"));
+						//DBG(("A S_init RST TO\n"));
 						//sobj_init = 0;
 						//sobj_init_tout = 255;	// 25.5sec
 						usb_active = 0;
 						sobj_State = SATA_NO_DEV;
 						return;
 					}
-					DBG(("S RST TO\n"));
+					//DBG(("S RST TO\n"));
 					// SATA Phy Ready Time-Out, Reset SATA Again
 					//sata_Reset(SATA_HARD_RST);
 					sata_HardReset();
@@ -3384,7 +3384,7 @@ void hdd_tick_isr()
 				sobj_State_tout--;
 				if (sobj_State_tout == 0)
 				{
-					DBG(("S PRDY TO\n"));
+					//DBG(("S PRDY TO\n"));
 					// SATA Drive Ready Time-Out
 					//sata_Reset(SATA_HARD_RST);
 					sata_HardReset();

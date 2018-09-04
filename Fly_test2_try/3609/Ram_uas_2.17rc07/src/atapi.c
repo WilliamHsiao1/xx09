@@ -80,8 +80,8 @@ u8 atapi_ReadID()  // could have argument - ATA/ATAPI , which ID command to use 
 	//u16 i, read_port;
 	//u8 *pU8;
 	
-	DBG(("atapi Read ID\n"));
-	DBG0(("atapi Read ID\n"));
+	//DBG(("atapi Read ID\n"));
+	//DBG0(("atapi Read ID\n"));
 
 	*sata_CCMSITEINDEX = 0;		// 
 	scm_site = 0;
@@ -159,7 +159,7 @@ u8 atapi_ReadID()  // could have argument - ATA/ATAPI , which ID command to use 
 \****************************************/
 bit atapi_init()
 {
-	DBG(("Atapi init\n"));
+	//DBG(("Atapi init\n"));
 
 	//FIXME: SATA FIS INIT
 	*sata_PacketLba_1 = 0xFF; 
@@ -195,7 +195,7 @@ bit atapi_fast_enum_init()
 	}
 	else
 	{
-		DBG0(("SATA_NO_DEV\n"));
+		//DBG0(("SATA_NO_DEV\n"));
 		sobj_State = SATA_NO_DEV;
 		usb_active = 0;
 		return 1;

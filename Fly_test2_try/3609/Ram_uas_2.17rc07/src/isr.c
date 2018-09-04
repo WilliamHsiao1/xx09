@@ -24,7 +24,7 @@ void asic_isr() interrupt 0
 		*chip_IntEn_1 = 0;
 		*chip_IntEn_3 = 0;
 #endif
-		DBG(("AI "));
+		//DBG(("AI "));
 	}
 }
 #endif

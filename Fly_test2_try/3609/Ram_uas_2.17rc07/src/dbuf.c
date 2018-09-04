@@ -32,7 +32,7 @@ void dbuf_get_data(u8 segment_num)
 	*dbuf_MuxCtrl;
 
 	sz16 = (dbuf_Port[TX_DBUF_CPU_R_PORT].dbuf_Port_Count_0) + (((u16)dbuf_Port[TX_DBUF_CPU_R_PORT].dbuf_Port_Count_1) << 8);
-	DBG(("dbuf_get_data %x\n", sz16));
+	//DBG(("dbuf_get_data %x\n", sz16));
 	if (sz16 > MC_BUFFER_SIZE)
 		sz16 = MC_BUFFER_SIZE;
 

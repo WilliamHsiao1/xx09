@@ -26,7 +26,7 @@ void Init_hardware_default_wave(void)
 {
 //	u8 temp8;
 
-	DBG(("Init_hardware_default wave\n"));
+	//DBG(("Init_hardware_default wave\n"));
 	//FIXME: must remove in REAL_CHIP !!
 	//*cup_MemCtrl_2 = CPU_SLOW_1_CLK;
 
@@ -116,7 +116,7 @@ void Init_hardware_default_wave(void)
 	//+Phase Interploar in PLL Loop
 	spi_phy_wr_retry(PHY_SPI_U3PMA, PMA_PHY_ANALOG_03, (tmp8 & (~0x0F)) | 0x80);
 #endif
-	DBG(("PMA:03 %bx\n", spi_phy_rd(PHY_SPI_U3PMA, 0x03)));
+	//DBG(("PMA:03 %bx\n", spi_phy_rd(PHY_SPI_U3PMA, 0x03)));
 
 #ifdef HW_CAL_SSC
 
@@ -244,7 +244,7 @@ void Init_hardware_default_wave(void)
 {
 	//u8 temp8;
 
-	DBG0(("Init_hardware_default wave\n"));
+	//DBG0(("Init_hardware_default wave\n"));
 	//FIXME: must remove in REAL_CHIP !!
 	//*cup_MemCtrl_2 = CPU_SLOW_1_CLK;
 
@@ -381,7 +381,7 @@ void main(void)
 	//MSG(("=========================\n"));
 
 	tmp8 = *chip_Revision;
-	DBG0(("Rev %BX ", tmp8));
+	//DBG0(("Rev %BX ", tmp8));
 
 	*fw_temp_3 |= DIS_AUTO_RST_SW;
 	*swreg_ctrl_0 = (*swreg_ctrl_0 & ~0x07) | 0x00; // set the switch regulator's voltage to 1.08V
@@ -403,7 +403,7 @@ void main(void)
 
 		while (1)
 		{
-			DBG(("\t%BX\n", *cpu_Clock_2));
+			//DBG(("\t%BX\n", *cpu_Clock_2));
 			spi_phy_wr_retry(PHY_SPI_U3PCS, PCS_PHY_DIGIAL_13, HW_RESTART_TXRX_DISABLE|HW_RESTART_PLL_DISABLE|PD_USB3_RX|PD_USB3_TX|PD_USB3_PLL);
 			Delay10us(1);
 			//turn on PLL
@@ -484,12 +484,12 @@ void main(void)
 	// MaxLun is zero
 	*usb_Msc0LunCtrl = 0;
 
-	DBG(("\tCK3 %BX\n", *cpu_Clock_3));
+    //DBG(("\tCK3 %BX\n", *cpu_Clock_3));
 
 	//Init_hardware_default_wave();
 	//Init_hardware_default_old();
 
-	DBG(("\tCK2 %BX\n", *cpu_Clock_2));
+    //DBG(("\tCK2 %BX\n", *cpu_Clock_2));
 
 	//romcode_check_stat	|= FW_ON_SPI;	
 	//DBG(("ok\n"));
@@ -612,7 +612,7 @@ START_UP:
 
 				#ifdef DBG_FUNCTION
 					uart_init();
-					DBG(("ref clk\n"));
+					//DBG(("ref clk\n"));
 				#endif
 				sobj_State = SATA_PWR_DWN;
 		#else
@@ -642,7 +642,7 @@ START_UP:
 			if (USB_VBUS_ON()) 	//USB cable plug-in
 				break;
 		}
-		DBG(("On\n"));
+		//DBG(("On\n"));
 		if (cfa_active == 0)
 		{
 #ifdef PWR_SAVING
@@ -674,8 +674,8 @@ START_UP:
 		
 	Init_hardware_default_wave();
 
-	DBG(("cpu_Clock_32 %BX%BX\n", *cpu_Clock_3,*cpu_Clock_2));
-	DBG(("usb_DevCtrl_21 %BX%BX %bx\n", *usb_DevCtrl_2,*usb_DevCtrl_1, spi_phy_rd(PHY_SPI_U3PCS, PCS_PHY_DIGIAL_13)));
+	//DBG(("cpu_Clock_32 %BX%BX\n", *cpu_Clock_3,*cpu_Clock_2));
+	//DBG(("usb_DevCtrl_21 %BX%BX %bx\n", *usb_DevCtrl_2,*usb_DevCtrl_1, spi_phy_rd(PHY_SPI_U3PCS, PCS_PHY_DIGIAL_13)));
 
 	*usb_DevCtrl_1 = USB_CORE_RESET;
 
@@ -753,7 +753,7 @@ START_UP:
 			sobj_State = SATA_PWR_DWN;
 		}
 		
-		DBG0(("F E %bx\n", sobj_State));
+		//DBG0(("F E %bx\n", sobj_State));
 		if (sobj_class == DEVICECLASS_ATA)
 		{
 			sobj_sectorLBA_l = sflash_vital_data.sectorLBA_l;
@@ -916,7 +916,7 @@ start_usb_emulation:
 	//tmp8 = spi_phy_rd(PHY_SPI_U3PCS, PCS_PHY_DIGIAL_13);
 	//spi_phy_wr(PHY_SPI_U3PCS, PCS_PHY_DIGIAL_13, tmp8 | (PD_USB3_TX|PD_USB3_RX));
 
-	DBG(("M0\n"));
+	//DBG(("M0\n"));
 
 
 	
@@ -958,7 +958,7 @@ start_usb_emulation:
 #endif
 	{
 		hdd_on_led();
-		DBG(("M2\n"));
+		//DBG(("M2\n"));
 	}
 
 	if (cfa_active == 0)
@@ -967,7 +967,7 @@ start_usb_emulation:
 		timer0_setup();
 	}
 	EAL = 1;
-	DBG(("M3\n"));
+	//DBG(("M3\n"));
 
 
 	usb_active = 1;
@@ -978,7 +978,7 @@ start_usb_emulation:
 //	else
 //#endif
 	usb_start();
-	DBG0(("E0 %BX\n", *cpu_Clock_2));
+	//DBG0(("E0 %BX\n", *cpu_Clock_2));
 	
 	*usb_DevCtrlClr_1 = USB2_FORCE_SUSP;
 	
@@ -1066,7 +1066,7 @@ start_usb_emulation:
 		power_down_hdd();
 	}
 #endif
-	DBG(("E4\n"));
+	//DBG(("E4\n"));
 
 	goto START_UP;
 }

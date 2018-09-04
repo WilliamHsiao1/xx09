@@ -29,7 +29,7 @@
 \****************************************/
 void UsbExec_Init(void)
 {
-	DBG(("Exec_Init\n"));
+	//DBG(("Exec_Init\n"));
 
 	//set USB23_DETECT_flag at initial. by Ted:2010/12/09
 	//USB23_DETECT_flag = 1;		
@@ -169,7 +169,7 @@ void usb_rst_do()
 
 		*usb_Msc0IntStatus_0 = MSC_RX_DONE_INT;
 		*usb_Msc0IntStatus_0;
-		DBG(("Do Rst %bx\n", *usb_Msc0IntStatus_0));
+		//DBG(("Do Rst %bx\n", *usb_Msc0IntStatus_0));
 }
 #endif
 /****************************************\
@@ -213,7 +213,7 @@ void usb_exec_tx_ctxt()
 	//val = *ctxt_No_Data;
 
 	// sets up the USB Transfer by loading the MSCn TX Context Register  
-	DBG(("set TxCtxt valid\n"));
+	//DBG(("set TxCtxt valid\n"));
 	
 	//DBG0(("TV:%BX, %BX\n", ctxt_site | (SCTXT_Flag & SCTXT_FLAG_NO_DATA), SCTXT_DbufIndex));
 	*usb_Msc0TxCtxt_0 = ctxt_site | (SCTXT_Flag & SCTXT_FLAG_NO_DATA);	//3609
@@ -312,7 +312,7 @@ void usb_exec_rx_ctxt()
 	// sets up the USB Transfer by loading the MSCn RX Context Register
 //	*host_ctxtmem_ptr = ctxt_site;
 //	SCTXT_INDEX = ctxt_site;
-	DBG(("RxCtxt: %BX\n", ctxt_site | (SCTXT_Flag & SCTXT_FLAG_NO_DATA)));
+	//DBG(("RxCtxt: %BX\n", ctxt_site | (SCTXT_Flag & SCTXT_FLAG_NO_DATA)));
 	*usb_Msc0RxCtxt_0 = ctxt_site | (SCTXT_Flag & SCTXT_FLAG_NO_DATA) ;
 
 
@@ -348,7 +348,7 @@ void usb_exec_rx_ctxt()
 void usb_exec_que_ctxt()
 {
 
-	DBG(("usb_exec_que_ctxt\n"));
+	//DBG(("usb_exec_que_ctxt\n"));
 	if ((ctxt_site = usb_ctxt_que) != CTXT_NULL)
 	{	// un-queue CDB context from pending que for USB RX Contxt
 		// and initiate USB xfer for CDB context 
@@ -742,7 +742,7 @@ void	usb30_clock_enable(void)
 	//Delay10us(10);
 
 	spi_phy_wr(PHY_SPI_U3PCS, PCS_PHY_DIGIAL_13, HW_RESTART_USB2_ENABLE);
-	DBG(("U3 P R\n"));
+	//DBG(("U3 P R\n"));
 	//while (1)
 	//{
 	//	if ((*cpu_Clock_2 & (USB3_PLL_RDY)))
@@ -857,15 +857,15 @@ void	usb_clock_enable(void)
 	// 12. resets the USBCLK_SELECT signal to switch the source to the USB PLL
 	*cpu_Clock_3 &= ~USBCLK_SELECT;
 
-	DBG(("w U PLL"));
-	DBG(("->R\n"));
+	//DBG(("w U PLL"));
+	//DBG(("->R\n"));
 }
 #endif	//#ifdef PWR_SAVING
 
 #ifdef PWR_SAVING
 void	usb20_clock_enable(void)
 {
-	DBG(("u2_c_e %bx\n", *cpu_Clock_2));
+	//DBG(("u2_c_e %bx\n", *cpu_Clock_2));
 	// Use REFCLK as source for USBCLK
 	*cpu_Clock_3 |= USBCLK_SELECT;
 
@@ -904,7 +904,7 @@ u8 usb_suspend_wait(u16 timeout)
 		{
 			if (USB_VBUS_OFF())
 			{
-				DBG0(("\tV of\n"));
+				//DBG0(("\tV of\n"));
 #ifdef PWR_SAVING
 				//usb20_clock_enable();
 #endif
@@ -915,7 +915,7 @@ u8 usb_suspend_wait(u16 timeout)
 			if (*cpu_wakeup_ctrl_0 & CPU_USB_UNSUSPENED)
 			{
 					*cpu_wakeup_ctrl_0 = CPU_USB_SUSPENDED|CPU_USB_UNSUSPENED;
-					DBG0(("\tRes %bx %bx\n", *usb_CMgr_Status_shadow, *usb_USB3StateCtrl));
+					//DBG0(("\tRes %bx %bx\n", *usb_CMgr_Status_shadow, *usb_USB3StateCtrl));
 					return 0;
 			}
 
@@ -944,7 +944,7 @@ chk_susp:
 					Delay(1);
 					if ((*cpu_wakeup_ctrl_0 & CPU_USB_SUSPENDED) == 0)
 					{
-						DBG0(("ab wa\n"));
+						//DBG0(("ab wa\n"));
 						return 0;
 					}
 				}
@@ -999,7 +999,7 @@ bit usb_suspend(bit fast_flag)
 		usbMode = CONNECT_UNKNOWN;
 	}
 
-	DBG0(("Su %bx\n", *usb_CMgr_Status_shadow));
+	//DBG0(("Su %bx\n", *usb_CMgr_Status_shadow));
 //	DBG0(("Su %bx\n", *cpu_wakeup_ctrl_0));
 	//DBG0(("Su %bx\n", *cpu_wakeup_ctrl_0));
 
@@ -1051,7 +1051,7 @@ bit usb_suspend(bit fast_flag)
 			if ((sobj_State == SATA_READY))
 		#endif
 			{
-	DBG(("Sp D\n"));
+	//DBG(("Sp D\n"));
 				if (ata_ExecNoDataCmd(ATA6_STANDBY_IMMEDIATE, 0) == CCM_STATUS_GOOD)
 				{
 					sobj_State = SATA_STANDBY;
@@ -1077,7 +1077,7 @@ bit usb_suspend(bit fast_flag)
 	#ifdef PWR_SAVING
 		if (sobj_State > SATA_PWR_DWN)
 		{
-DBG(("S PD\n"));
+//DBG(("S PD\n"));
 			sata_pwr_down();
 		}
 	#endif
@@ -1134,7 +1134,7 @@ DBG(("S PD\n"));
 					// Enable hardware reset switch regulator
 					*fw_temp_3 &= ~DIS_AUTO_RST_SW;
 
-		DBG(("Su %BX\n", *swreg_ctrl_1));
+		//DBG(("Su %BX\n", *swreg_ctrl_1));
 					// set switching regulator to low voltage for power saving
 					// 111: 1.14V
 					// 000: 1.08V
@@ -1160,7 +1160,7 @@ DBG(("S PD\n"));
 				*swreg_ctrl_0 = (*swreg_ctrl_0 & ~0x07) | 0x01; // set the switch regulator's voltage to 1.02V
 				#if 1
 					usb30_clock_enable();
-					DBG(("USB Up %bx\n", *cpu_Clock_2));
+					//DBG(("USB Up %bx\n", *cpu_Clock_2));
 					if ((*cpu_Clock_2 & USB2_PLL_RDY) == 0)
 					{
 						for (i8 = 0; i8 < 255; i8++)
@@ -1168,12 +1168,12 @@ DBG(("S PD\n"));
 							Delay10us(1);
 							if ((*cpu_Clock_2 & USB2_PLL_RDY))
 							{
-								DBG(("i8 %bx\n", i8+1));
+								//DBG(("i8 %bx\n", i8+1));
 								goto u2_free_run;
 							}
 
 						}
-						DBG(("U2 C Tout\n"));
+						//DBG(("U2 C Tout\n"));
 						// Use REFCLK as source for USBCLK
 						*cpu_Clock_3 |= USBCLK_SELECT;
 					}
@@ -1203,13 +1203,13 @@ u2_free_run:
 #endif	//#ifdef PWR_SAVING
 
 
-DBG0(("Su wait \n"));
+//DBG0(("Su wait \n"));
 #define prev_ck3 val
 
 		if (usbMode != CONNECT_USB3)
 		{
 			prev_ck3 = *cpu_Clock_3;
-			DBG(("C3 %BX\n", prev_ck3));
+			//DBG(("C3 %BX\n", prev_ck3));
 		}
 
 		while (1)
@@ -1220,7 +1220,7 @@ DBG0(("Su wait \n"));
 				if (tmp8 != prev_ck3)
 				{
 					prev_ck3 = tmp8;
-					DBG0(("\tC3 %BX\n", prev_ck3));
+					//DBG0(("\tC3 %BX\n", prev_ck3));
 					//*usb_DevCtrl_2 =	USB2_PLL_FREERUN;	// Enable U2 PLL Freerun
 					*cpu_wakeup_ctrl_2 = USB_WAKEUP_REQ;
 				}
@@ -1230,7 +1230,7 @@ DBG0(("Su wait \n"));
 #ifdef PWR_SAVING
 				usb_clock_enable();
 #endif
-				DBG(("v of\n"));
+				//DBG(("v of\n"));
 				usb_active = 0;
 					//bot_usb_bus_reset();
 				return 1;
@@ -1239,18 +1239,18 @@ DBG0(("Su wait \n"));
 			{
 				if (*usb_IntStatus_shadow_0 & USB_BUS_RST)
 				{
-					DBG(("USB2 BRst\n"));
+					//DBG(("USB2 BRst\n"));
 #ifdef PWR_SAVING
 					usb_clock_enable();
 #endif
 					*cpu_wakeup_ctrl_0 = CPU_USB_SUSPENDED;
 					*usb_IntStatus_0 = USB_SUSPEND;
-					DBG(("clr %bx, %bx\n", *cpu_wakeup_ctrl_0, *usb_IntStatus_shadow_0));
+					//DBG(("clr %bx, %bx\n", *cpu_wakeup_ctrl_0, *usb_IntStatus_shadow_0));
 					Delay(1);
-					DBG(("%bx, %bx\n", *cpu_wakeup_ctrl_0, *usb_IntStatus_shadow_0));	
+					//DBG(("%bx, %bx\n", *cpu_wakeup_ctrl_0, *usb_IntStatus_shadow_0));	
 					if ((*cpu_wakeup_ctrl_0 & CPU_USB_SUSPENDED) == 0)
 					{
-						DBG0(("ab USB2 Wk\n"));
+						//DBG0(("ab USB2 Wk\n"));
 						break;
 					}
 				}
@@ -1269,7 +1269,7 @@ DBG0(("Su wait \n"));
 				}
 #endif
 				*cpu_wakeup_ctrl_0 = CPU_USB_SUSPENDED|CPU_USB_UNSUSPENED;
-				DBG0(("\tBW\n"));
+				//DBG0(("\tBW\n"));
 				break;
 			}
 		}	// while (1)
@@ -1278,7 +1278,7 @@ DBG0(("Su wait \n"));
 
 //DBG0(("Su wake \n"));
 usb_wakeup:
-DBG(("\tWake\n"));
+//DBG(("\tWake\n"));
 
 #if 1	// debug
 		if (usbMode == CONNECT_USB3)
@@ -1296,7 +1296,7 @@ DBG(("\tWake\n"));
 //			//*usb_DevCtrlClr_2 =	USB2_PLL_FREERUN;	// disable U2 PLL Freerun
 			//*usb_USB3StateSelect = 0x00;
 			temp_USB3StateCtl = *usb_USB3StateCtrl;
-			DBG0(("\tL %BX\n", temp_USB3StateCtl));
+			//DBG0(("\tL %BX\n", temp_USB3StateCtl));
 
 			ET0 = 1;			//Enable Timer 0 interrupt
 		}
@@ -1330,7 +1330,7 @@ void usb_msc_isr()
 {
 	//u8 Msc0Int_0 = *usb_Msc0IntStatus_0;
 
-	DBG(("msc_isr\n"));
+	//DBG(("msc_isr\n"));
 
 	val = *usb_Msc0IntStatus_0;
 	if (val & MSC_TX_DONE_INT)
@@ -1338,11 +1338,11 @@ void usb_msc_isr()
 #ifdef DBG_ODD_U2
 			if (dbg_flag)
 			{
-				DBG0(("vUtxd\n"));
+				//DBG0(("vUtxd\n"));
 			}
 #endif	
 	
-			DBG(("tx done\n"));
+			//DBG(("tx done\n"));
 #if 0
 			if (*usb_Msc0DIXferStatus & 0x0F)
 			{
@@ -1367,10 +1367,10 @@ void usb_msc_isr()
 				*host_ctxtmem_ptr = ctxt_site;
 				SCTXT_INDEX = ctxt_site;
 
-				DBG(("msc_isr: ctxt\n"));
+				//DBG(("msc_isr: ctxt\n"));
 				if (SCTXT_CCMIndex != SCM_NULL)
 				{
-					DBG(("msc_isr: goto msc_isr_check_rx\n"));
+					//DBG(("msc_isr: goto msc_isr_check_rx\n"));
 					goto msc_isr_check_rx;
 				}
 //				DBG("CTXT_ccmIndex:%BX\n", *ctxt_ccmIndex);
@@ -1499,7 +1499,7 @@ void usb_msc_isr()
 #ifdef UAS_EN
 					if ((*ctxt_SataProto & 0xc0) == 0x80)
 					{	// // send status Back if it is NCQ Protocol
-						DBG(("sense IU for NCQ, site: %BX\n", ctxt_site));
+						//DBG(("sense IU for NCQ, site: %BX\n", ctxt_site));
 						if (SCTXT_Status >= CTXT_STATUS_PENDING)
 						{
 							SCTXT_Status = CTXT_STATUS_GOOD;
@@ -1518,11 +1518,11 @@ void usb_msc_isr()
 //							if (reg_r32(chip_IntStaus) & SATA0_INT)
 //								sata_isr();
 //						}
-						DBG(("status response %BX\n", SCTXT_Status));
+						//DBG(("status response %BX\n", SCTXT_Status));
 #ifdef DBG_ODD_U2
 						if (dbg_flag)
 						{
-							DBG0(("vu_Ss %bx\n", SCTXT_Status));
+							//DBG0(("vu_Ss %bx\n", SCTXT_Status));
 						}
 #endif	
 
@@ -1558,11 +1558,11 @@ void usb_msc_isr()
 #ifdef DBG_ODD_U2
 		if (dbg_flag)
 		{
-			DBG0(("vUHALTIN\n"));
+			//DBG0(("vUHALTIN\n"));
 		}
 #endif	
 	
-		DBG(("usb_msc_isr: halt in\n"));
+		//DBG(("usb_msc_isr: halt in\n"));
 
 		if ((*usb_Msc0DICtrl & MSC_DI_HALT))
 			goto msc_isr_check_rx;
@@ -1623,11 +1623,11 @@ msc_isr_check_rx:
 	// check RX context of MSC0
 	if (val & MSC_RX_DONE_INT)
 	{	// USB Data Out done on active CDB Context of RX Context
-		DBG(("usb_msc_isr: USB rx done\n"));
+		//DBG(("usb_msc_isr: USB rx done\n"));
 #ifdef DBG_ODD_U2
 		if (dbg_flag)
 		{
-			DBG0(("vURxd\n"));
+			//DBG0(("vURxd\n"));
 		}
 #endif	
 		
@@ -1635,11 +1635,11 @@ msc_isr_check_rx:
 		tmp8 = *usb_Msc0DOXferStatus;
 		if (tmp8)
 		{
-			DBG0(("DOs:%BX %BX\n", tmp8, CACHE_BYTE0));
+			//DBG0(("DOs:%BX %BX\n", tmp8, CACHE_BYTE0));
 			*usb_Msc0DOutCtrlClr = MSC_RXFIFO_RESET;
 		#ifdef DBG_FUNCTION
 			tmp8 = *usb_Msc0DOXferStatus;
-			DBG0(("DOs:%BX %BX\n", tmp8, CACHE_BYTE0));
+			//DBG0(("DOs:%BX %BX\n", tmp8, CACHE_BYTE0));
 		#endif
 		}
 		EAL = 1;
@@ -1698,8 +1698,8 @@ msc_isr_check_rx:
 
 
 			do_crl = *usb_Msc0DOutCtrl;
-			DBG(("do_crl: %BX\n", do_crl));
-			DBG(("MscIntStatus_0:%bX\n", val));
+			//DBG(("do_crl: %BX\n", do_crl));
+			//DBG(("MscIntStatus_0:%bX\n", val));
 
 			if (SCTXT_Status == CTXT_STATUS_PENDING)
 			{
@@ -1759,7 +1759,7 @@ rx_done_ok:
 				{
 					if (SCTXT_Flag & SCTXT_FLAG_U2B)
 					{
-						DBG(("DO U2B dn %BX\n", SCTXT_Status));
+						//DBG(("DO U2B dn %BX\n", SCTXT_Status));
 						if (SCTXT_Status >= CTXT_STATUS_HALT)
 						{
 							if (*ctxt_PhaseCase_1 & B_BIT_11)		// Case 11 = 0x08
@@ -1820,11 +1820,11 @@ rx_done_ok:
 #ifdef DBG_ODD_U2
 		if (dbg_flag)
 		{
-			DBG0(("vUHALTout\n"));
+			//DBG0(("vUHALTout\n"));
 		}
 #endif	
 
-		DBG(("usb_msc_isr: halt out done\n"));
+		//DBG(("usb_msc_isr: halt out done\n"));
 
 		if ((*usb_Msc0DOutCtrl & MSC_DOUT_HALT))
 			return;
@@ -1851,7 +1851,7 @@ rx_done_ok:
 #endif					
 					if (SCTXT_Flag & SCTXT_FLAG_U2B)
 					{
-						DBG(("DOH U2B dn %BX\n", SCTXT_Status));
+						//DBG(("DOH U2B dn %BX\n", SCTXT_Status));
 						// is USB-2-CPU command(not USB-2-SATA command)
 						// process data from USB host for SCSI CDB. ????
 //						SCTXT_Status = CTXT_STATUS_XFER_DONE;
@@ -1932,7 +1932,7 @@ rx_done_ok:
 
 void usb_wrong_sata_device()
 {
-	DBG0(("Dif Class\n"));
+	//DBG0(("Dif Class\n"));
 	// Disable USB Enumeration
 	*usb_DevCtrlClr_1 = USB2_FORCE_SUSP;
 	*usb_DevCtrlClr_0 = USB_ENUM;

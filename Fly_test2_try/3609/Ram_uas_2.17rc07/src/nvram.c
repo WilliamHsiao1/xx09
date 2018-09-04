@@ -57,7 +57,7 @@ void sflash_rd_jedec_id()
 	sflash_pid1 = *spi_Data_2;
 
 	reg_w8(spi_IntStatus, SPI_IntStatus_Done);
-	DBG(("sf_vid:%bx %bx\n", sflash_vid, sflash_pid0));
+	//DBG(("sf_vid:%bx %bx\n", sflash_vid, sflash_pid0));
 }
 
 void sflash_rd_id()
@@ -75,7 +75,7 @@ void sflash_rd_id()
 	sflash_pid0 = *spi_Data_1;
 
 	*spi_IntStatus = SPI_IntStatus_Done;
-	DBG(("sf_id:%bx %bx\n", sflash_vid, sflash_pid0));
+	//DBG(("sf_id:%bx %bx\n", sflash_vid, sflash_pid0));
 
 }
 
@@ -118,7 +118,7 @@ void sflash_get_type()
 	{
 		fast_enum_usb_flag = 0;
 		valid_sflash_vital_data = 0;
-		DBG0(("unknow flash\n" ));
+		//DBG0(("unknow flash\n" ));
 	}
 }
 
@@ -143,7 +143,7 @@ wen_lp:
 		*spi_Ctrl_2 = SPI_START;
 		sflash_wait_cmd_done();
 		tmp8 = *spi_Data_0;
-		DBG(("MXIC SR %BX\n", tmp8));
+		//DBG(("MXIC SR %BX\n", tmp8));
 		*spi_IntStatus = SPI_IntStatus_Done;
 		if ((tmp8 & 0x2) == 0)		// WEL bit
 			goto wen_lp;
@@ -182,7 +182,7 @@ void sflash_erase_chip()
 		sflash_get_type();
 		if (sflash_type == UNKNOWN_FLASH)
 		{
-			DBG(("unknow flash\n"));
+			//DBG(("unknow flash\n"));
 			return;
 		}
 	}
@@ -240,14 +240,14 @@ void sflash_erase_chip()
 
 void sflash_erase_sector(u8 sector)
 {
-	DBG(("er sec\n"));
+	//DBG(("er sec\n"));
 
 	if (sflash_type == UNKNOWN_FLASH)
 	{
 		sflash_get_type();
 		if (sflash_type == UNKNOWN_FLASH)
 		{
-			DBG(("unknow flash\n"));
+			//DBG(("unknow flash\n"));
 			return;
 		}
 	}
@@ -313,7 +313,7 @@ void sflash_erase_sector(u8 sector)
 #ifdef USB_FAST_ENUM
 void sflash_rd_vital_data()
 {
-	DBG0(("rd vital\n"));
+	//DBG0(("rd vital\n"));
 
 	*spi_IntStatus = SPI_IntStatus_Done;
 
@@ -348,7 +348,7 @@ void sflash_rd_vital_data()
 		if (sflash_vital_data.sobj_class == DEVICECLASS_ATAPI)
 			return 1;
 #endif
-		DBG0(("valid vital\n"));
+		//DBG0(("valid vital\n"));
 		valid_sflash_vital_data = 1;
 	}
 	else
@@ -358,7 +358,7 @@ void sflash_rd_vital_data()
 void sflash_wr_vital_data()
 {
 
-	DBG0(("wr vital\n"));
+	//DBG0(("wr vital\n"));
 
 	if (sflash_type == UNKNOWN_FLASH)
 	{
@@ -380,7 +380,7 @@ loop:
 
 	if ((sflash_type == MXIC) && (sflash_pid0 == 0x22))		// 5121E & 1021E
 	{
-		DBG(("i8 %bx\n", i8));
+		//DBG(("i8 %bx\n", i8));
 		for (tmp8 = 32; tmp8 != 0; tmp8--)
 		{
 			 *spi_Data_0 = *pU8++;
@@ -420,7 +420,7 @@ loop:
 
 void sflash_init_vital_data()
 {
-	DBG0(("in vital\n"));
+	//DBG0(("in vital\n"));
 	if (sflash_type == UNKNOWN_FLASH)
 	{
 		sflash_get_type();
@@ -514,7 +514,7 @@ void sflash_read_data(u16 flash_addr,u16 read_size)
 void sflash_write_data(u8 xdata *ptr,u16 flash_addr,u16 downlozd_size)
 {
 	//DBG0(("wr data\n"));
-	DBG0(("addr %x \n", flash_addr));
+	//DBG0(("addr %x \n", flash_addr));
 
 	if (sflash_type == UNKNOWN_FLASH)
 	{
@@ -534,7 +534,7 @@ loop:
 
 	if ((sflash_type == MXIC) && (sflash_pid0 == 0x22))			// 5121E & 1021E
 	{
-		DBG0(("tmp16 %x\n", tmp16));
+		//DBG0(("tmp16 %x\n", tmp16));
 		for (tmp8 = 32; tmp8 != 0; tmp8--)
 		{
 			 *spi_Data_0 = *pU8++;
@@ -601,13 +601,13 @@ void NvReadGlobalNvram(void)
 		*pU8++ = *spi_Data_3;
 	}
 
-	DBG(("G NVRAM %bx %bx %bx %bx\n", mc_buffer[0], mc_buffer[1], mc_buffer[2], mc_buffer[3]));
+	//DBG(("G NVRAM %bx %bx %bx %bx\n", mc_buffer[0], mc_buffer[1], mc_buffer[2], mc_buffer[3]));
 	if ((mc_buffer[0] == 0x25) &&
 		(mc_buffer[1] == 0xC9) &&
 		(mc_buffer[2] == 0x36) &&
 		(mc_buffer[3] == 0x09) )
 	{
-		DBG(("iSeri %bx %bx %bx\n", mc_buffer[0x5C], mc_buffer[0x5D], mc_buffer[0x5E]));
+		//DBG(("iSeri %bx %bx %bx\n", mc_buffer[0x5C], mc_buffer[0x5D], mc_buffer[0x5E]));
 		*chip_status |= NV_ON_SPI;
 		xmemcpy(mc_buffer, (u8 xdata *)(&globalNvram), NVR_DATASIZE);
 	}

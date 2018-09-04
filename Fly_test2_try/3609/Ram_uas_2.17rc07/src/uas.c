@@ -211,7 +211,7 @@ void uas_device_data_out()
 	{
 		hdd_que_dout_ctxt = ctxt_site;
 		hdd_que_dout_tout = HDD_UAS_QUE_TOUT;
-DBG0(("\tDO Bsy\n"));
+//DBG0(("\tDO Bsy\n"));
 		return;
 	}
 	usb_append_ctxt_que();
@@ -223,7 +223,7 @@ DBG0(("\tDO Bsy\n"));
 void uas_bus_reset()
 {
 	MSG(("uas_brst\n"));
-	DBG0(("s %bx\n", sobj_State));
+	//DBG0(("s %bx\n", sobj_State));
 
 #if 0	
 					*usb_DevCtrlClr_0 = USB_ENUM;
@@ -289,7 +289,7 @@ void uas_push_ctxt_site_to_free_fifo()
 	*usb_Msc0LunCtxtUsed_0 = 0xFF;	// -1
 
 	SCTXT_INDEX = ctxt_site;
-	DBG0(("p f FIFO %BX %BX\n", ctxt_site, SCTXT_Tag));
+	//DBG0(("p f FIFO %BX %BX\n", ctxt_site, SCTXT_Tag));
 	if (SCTXT_CCMIndex != SCM_NULL)
 	{	// break association between ctxt & SCM
 		SCM_INDEX = SCTXT_CCMIndex;
@@ -722,7 +722,7 @@ void uas_abort_all()
 			*usb_Msc0StatCtrlClr;
 
 			*usb_Msc0IntStatus_0 = MSC_RX_DONE_INT;
-			DBG0(("Do Rst %bx\n", *usb_Msc0IntStatus_0));
+			//DBG0(("Do Rst %bx\n", *usb_Msc0IntStatus_0));
 		#endif
 		}
 
@@ -803,7 +803,7 @@ void uas_send_response_iu(u8 response_code, u8 ITag)
 	//*usb_Msc0Response_2 = 0;
 	*usb_Msc0Response_3 = response_code;
 
-	DBG(("Res %BX\n", *usb_Msc0Response_3));
+	//DBG(("Res %BX\n", *usb_Msc0Response_3));
 
 	//now send it
 	*usb_Msc0StatCtrl = MSC_STAT_RESP_RUN;
@@ -836,7 +836,7 @@ void UAS_Task_Manage_IU()
 {
 	u8	response_code;
 
-	DBG(("TMIU\n"));
+	//DBG(("TMIU\n"));
 
 	uas_fetch_TIU();
 
@@ -929,7 +929,7 @@ tiu_again:
 		switch (tiu_func)
 		{
 			case  ABORT_TASK:
-				DBG(("abt\n"));
+				//DBG(("abt\n"));
 				//if (((tmp8 = *usb_Msc0TaskTTag_0) >= 0x20) ||
 				//	(*usb_Msc0TaskTTag_1 != 0))
 				//{
@@ -1007,7 +1007,7 @@ abort_all:
 				break;
 			default:
 				// 4.52
-				DBG(("b tiu %bx\n", tiu_func));
+				//DBG(("b tiu %bx\n", tiu_func));
 				response_code = (TaskManageNotSupported) ;			// TASK MANAGEMENT FUNCTION NOT SUPPORTED
 				break;
 		} // switch
@@ -1031,7 +1031,7 @@ send_riu:
 		#else
 			*usb_Msc0StatCtrl = MSC_STAT_RESET;
 
-			DBG(("\tT>T %BX\n", *usb_Msc0StatCtrl));
+			//DBG(("\tT>T %BX\n", *usb_Msc0StatCtrl));
 			//EAL = 0;
 			//*usb_USB3StateSelect = 0x0B;		// MSC0 STATUS Control State Machine
 			//tmp8 = *usb_USB3StateCtrl;
@@ -1091,7 +1091,7 @@ send_riu_2:
 
 	//now send it
 	*usb_Msc0StatCtrl = MSC_STAT_RESP_RUN;
-	DBG(("\tStC %BX\n", *usb_Msc0StatCtrl));
+	//DBG(("\tStC %BX\n", *usb_Msc0StatCtrl));
 	uas_st_tout_cnt = 10;
 	if (tiu_func)
 	{
@@ -1156,7 +1156,7 @@ void uas_send_sense_iu()
 #ifdef DBG_FUNCTION
 	if (tmp8)
 	{
-		DBG0(("Sen %BX %BX", uas_senseBuffer[2], uas_senseBuffer[12]));
+		//DBG0(("Sen %BX %BX", uas_senseBuffer[2], uas_senseBuffer[12]));
 	}
 #endif
 
@@ -1410,7 +1410,7 @@ void chk_condition_action_for_Intel_UAS(void)
 
 void uas_tx_sense_done()
 {
-	DBG(("usb_msc_isr: tx sense done\n"));
+	//DBG(("usb_msc_isr: tx sense done\n"));
 								
 	*usb_Msc0IntStatus_1 = MSC_TXSENSE_DONE_INT;
 	*usb_Msc0StatCtrlClr = MSC_STAT_FLOW_CTRL;
@@ -1431,7 +1431,7 @@ void uas_tx_sense_done()
 		}
 		else
 		{
-			DBG0(("SCTXT_Tag 0\n"));
+			//DBG0(("SCTXT_Tag 0\n"));
 		#ifdef DEBUG_DP
 		//#if 0
 			dump_reg();
@@ -1506,7 +1506,7 @@ bit uas_chk_TSFull()
 				//Delay10us(60);
 				//if (*usb_Msc0CtxtUsed_0 > val)
 				{
-					DBG(("TSF %BX %BX\n", val, *usb_Msc0CtxtUsed_0));
+					//DBG(("TSF %BX %BX\n", val, *usb_Msc0CtxtUsed_0));
 					for (i8 = 0; i8 < 255; i8++)
 					{
 						if (*usb_Msc0CtxtUsed_0 > MAX_UAS_TAG_ID)
@@ -1549,7 +1549,7 @@ bit uas_chk_TSFull()
 								}
 								if ((--tmp16) == 0)
 								{
-									DBG(("TSF tout\n"));
+									//DBG(("TSF tout\n"));
 									EAL = 1;
 									return 1;
 								}
@@ -1558,7 +1558,7 @@ bit uas_chk_TSFull()
 							{
 								*usb_Msc0StatCtrl = MSC_STAT_RESET;
 								EAL = 1;
-								DBG0(("TSF D %BX\n", val));
+								//DBG0(("TSF D %BX\n", val));
 								*usb_Msc0IntStatus_1 = MSC_TSFULL_DONE_INT;
 								//MSG(("Cus %bx, %bx\n", (u8)uas_ctxt_used, i8));
 								return 1;
@@ -1566,8 +1566,8 @@ bit uas_chk_TSFull()
 						}
 						Delay10us(6);
 					}	//for (i8 = 0; i8 < 255; i8++)
-					DBG(("Tag %bx site %bx ctxtU %bx\n", SCTXT_Tag, ctxt_site, *usb_Msc0CtxtUsed_0));	
-					DBG0(("TSF F %BX %BX\n", val, *usb_Msc0CtxtUsed_0));
+					//DBG(("Tag %bx site %bx ctxtU %bx\n", SCTXT_Tag, ctxt_site, *usb_Msc0CtxtUsed_0));	
+					//DBG0(("TSF F %BX %BX\n", val, *usb_Msc0CtxtUsed_0));
 				}
 			}
 			//*usb_USB3Option_1 |= USB3_ENABLE_FLOW_PRIME;
@@ -1632,12 +1632,12 @@ void uas_status_dead_time_out()
 //st_flow_tout:
 							*usb_Msc0IntStatus_1 = MSC_ST_TIMEOUT_INT;
 							tmp8 = *usb_Msc0StatCtrl;
-		DBG(("mSI %BX ", tmp8));
+		//DBG(("mSI %BX ", tmp8));
 
 							if ((tmp8 & (STATUS_ACKE|STATUS_ACKR)) && 
 								(tmp8 & (MSC_STAT_RESP_RUN|MSC_STAT_TXSENSE_RUN|MSC_STAT_RXSENSE_RUN)) )
 							{
-								DBG(("mStCt\n"));
+								//DBG(("mStCt\n"));
 								//tmp8 &= MSC_STAT_HOST_WAIT;
 								//if ((tmp8 == STATUS_ACKE) || (tmp8 == STATUS_ACKR))
 								{
@@ -1686,7 +1686,7 @@ void uas_status_dead_time_out()
 									{
 si_flow_ctrl:
 										*usb_Msc0StatCtrl = MSC_STAT_FLOW_CTRL;
-										DBG0(("SI_F\n"));
+										//DBG0(("SI_F\n"));
 										//*host_ctxtmem_ptr = usb_curCtxt;
 										//mem_dump(ctxt_CDB, 10);	
 									#ifdef UAS_TOUT
@@ -1808,7 +1808,7 @@ void usb_uas()
 #ifdef DBG_FUNCTION
 			EAL = 0;
 #endif
-			DBG(("UV off\n"));
+			//DBG(("UV off\n"));
 #ifdef PWR_SAVING
 			//usb20_clock_enable();
 			spi_phy_wr_retry(PHY_SPI_U3PCS, PCS_PHY_DIGIAL_13, HW_RESTART_TXRX_DISABLE|HW_RESTART_USB2_ENABLE|PD_USB3_TX|PD_USB3_RX);
@@ -1825,7 +1825,7 @@ void usb_uas()
 		#ifdef USB2_L1_PATCH		
 			if (tmp8 & CPU_USB2_L1_SLEEP)
 			{
-				DBG(("U L1\n"));
+				//DBG(("U L1\n"));
 				//*cpu_wakeup_ctrl_0 = CPU_USB2_L1_SLEEP;
 
 				while (1)
@@ -1847,7 +1847,7 @@ void usb_uas()
 						*cpu_wakeup_ctrl_0 = CPU_USB_SUSPENDED|CPU_USB_UNSUSPENED;
 						*usb_IntStatus_0 = USB_SUSPEND;
 						
-						DBG0(("\tRes\n"));
+						//DBG0(("\tRes\n"));
 
 						//goto begin;
 						break;
@@ -1946,7 +1946,7 @@ void usb_uas()
 				{	
 				   //check_usb_mode();
 
-					DBG(("U ep_stp\n"));
+					//DBG(("U ep_stp\n"));
 					usb_control();
 				}
 			}
@@ -2022,7 +2022,7 @@ void usb_uas()
 				val = *ctxt_ITag_0;
 				if (val == 0)
 				{
-					DBG0(("Inv Tag\n"));
+					//DBG0(("Inv Tag\n"));
 					*usb_CtxtFreeFIFO = ctxt_site;
 					*usb_Msc0LunCtxtUsed_0 = 0xFF;	// -1
 					goto chk_msc_int;
@@ -2107,7 +2107,7 @@ start_scsi_cmd:
 						\****************************************/
 						if (*ctxt_SatFailReason & (SAT_LBA_OVRN|SAT_LBA_ERR|SAT_SECCNT_ERR))
 						{
-							DBG(("Bad Rd cmd %bx\n", *ctxt_SatFailReason));
+							//DBG(("Bad Rd cmd %bx\n", *ctxt_SatFailReason));
 							//*ctxt_Next = CTXT_NULL;
 							hdd_err_2_sense_data(ERROR_ILL_CDB);
 							uas_device_no_data();
@@ -2148,7 +2148,7 @@ start_scsi_cmd:
 								break;
 							}
 						#endif
-							DBG(("RD %bx %bx\n", sobj_State, sobj_State_tout));
+							//DBG(("RD %bx %bx\n", sobj_State, sobj_State_tout));
 
 							hdd_que_ctxt_site = ctxt_site;
 							hdd_que_ctxt_tout = HDD_UAS_QUE_TOUT;					// 
@@ -2169,7 +2169,7 @@ start_scsi_cmd:
 						
 						if (uas_ci_paused)
 						{
-							DBG0(("\trd\n"));
+							//DBG0(("\trd\n"));
 							uas_ci_paused = 0;
 						}
 
@@ -2213,7 +2213,7 @@ start_scsi_cmd:
 						\****************************************/
 						if (*ctxt_SatFailReason & (SAT_LBA_OVRN|SAT_LBA_ERR|SAT_SECCNT_ERR))
 						{
-							DBG(("Bad Wr cmd %bx\n", *ctxt_SatFailReason));
+							//DBG(("Bad Wr cmd %bx\n", *ctxt_SatFailReason));
 							//*ctxt_Next = CTXT_NULL;
 							hdd_err_2_sense_data(ERROR_ILL_CDB);
 							uas_device_no_data();
@@ -2235,7 +2235,7 @@ start_scsi_cmd:
 								mem_dump(ctxt_FIS, 16);
 							#endif							
 	uas_nodata:
-								DBG(("_nodata\n"));
+								//DBG(("_nodata\n"));
 								//SCTXT_Status = LUN_STATUS_GOOD;
 								SCTXT_LunStatus = LUN_STATUS_GOOD;
 								uas_device_no_data();
@@ -2255,7 +2255,7 @@ start_scsi_cmd:
 								break;
 							}
 						#endif
-							DBG(("WR %bx %bx\n", sobj_State, sobj_State_tout));
+							//DBG(("WR %bx %bx\n", sobj_State, sobj_State_tout));
 
 							hdd_que_ctxt_site = ctxt_site;
 							hdd_que_ctxt_tout = HDD_UAS_QUE_TOUT;					// 
@@ -2275,7 +2275,7 @@ start_scsi_cmd:
 
 						if (uas_ci_paused)
 						{
-							DBG0(("\twr\n"));
+							//DBG0(("\twr\n"));
 							uas_ci_paused = 0;
 						}
 
@@ -2504,7 +2504,7 @@ si_flow_ctrl:
 							tmp8 = *usb_Msc0DIXferStatus & MSC_DATAIN_HOST_WAIT;
 							val = CACHE_BYTE0;		//	read usb_Msc0DICtrl	
 							*usb_Msc0IntStatus_1 = MSC_DI_TIMEOUT_INT;
-							DBG(("DI_To %BX ", tmp8));
+							//DBG(("DI_To %BX ", tmp8));
 
 							// chk Host_Wait
 							//if ((tmp8 >= ACKE) && (tmp8 != ACK1))
@@ -2533,13 +2533,13 @@ si_flow_ctrl:
 
 										if (val & MSC_DIN_FLOW_CTRL)
 										{
-												DBG0(("di %BX %BX\n", tmp8, val));
+												//DBG0(("di %BX %BX\n", tmp8, val));
 												// Reset Host Wait
 												*usb_Msc0DIXferStatus = 0;
 										}
 										else
 										{	// Set Flow_Ctrl
-												DBG0(("DI_F %BX %BX\n", tmp8, *usb_Msc0DICtrl));
+												//DBG0(("DI_F %BX %BX\n", tmp8, *usb_Msc0DICtrl));
 												*usb_Msc0DICtrl = MSC_DIN_FLOW_CTRL;
 										}
 									}
@@ -2548,7 +2548,7 @@ si_flow_ctrl:
 							else
 							{	// invalid_Host_Wait
 inv_Host_wait:
-								DBG0(("DI %BX %BX\n", tmp8, val));
+								//DBG0(("DI %BX %BX\n", tmp8, val));
 								//*usb_Msc0DIXferStatus = 0;
 							}
 						}	// if (msc_int_status_1 & MSC_DI_TIMEOUT_INT)
@@ -2558,7 +2558,7 @@ inv_Host_wait:
 							tmp8 = *usb_Msc0DOXferStatus;
 							val = CACHE_BYTE0;		//	read usb_Msc0DOCtrl	
 							*usb_Msc0IntStatus_1 = MSC_DO_TIMEOUT_INT;
-							DBG0(("DO_To %bx ", tmp8));
+							//DBG0(("DO_To %bx ", tmp8));
 						//#ifdef DEBUG_DP
 						#if 0
 							uas_timeout++;
@@ -2578,7 +2578,7 @@ inv_Host_wait:
 							}
 							else
 							{
-								DBG0(("%BX\n", *usb_Msc0DOutCtrl));
+								//DBG0(("%BX\n", *usb_Msc0DOutCtrl));
 							}
 						}
 					}
@@ -2627,7 +2627,7 @@ inv_Host_wait:
 			{
 				if ((sobj_State == SATA_READY) || (sobj_State == SATA_STANDBY))
 				{
-DBG(("\tStart DO\n"));
+//DBG(("\tStart DO\n"));
 					ctxt_site = hdd_que_dout_ctxt;
 					hdd_que_dout_ctxt = CTXT_NULL;
 
@@ -2669,7 +2669,7 @@ DBG(("\tStart DO\n"));
 			{
 				if (sobj_State > SATA_READY)
 				{
-					DBG0(("S UP\n"));
+					//DBG0(("S UP\n"));
 					sobj_State = SATA_RESETING;
 					usb_active = 0;
 					return;
@@ -2735,7 +2735,7 @@ DBG(("\tStart DO\n"));
 
 						hdd_que_ctxt_site = CTXT_NULL;
 
-		DBG0(("HD tou %bx %bx\n", sobj_State, sobj_State_tout));
+		//DBG0(("HD tou %bx %bx\n", sobj_State, sobj_State_tout));
 						// Time out
 						if (sobj_State > SATA_READY)
 						{
@@ -2764,7 +2764,7 @@ DBG(("\tStart DO\n"));
 						SCTXT_INDEX = ctxt_site;
 
 
-		DBG0(("DO tou %bx\n", sobj_State));
+		//DBG0(("DO tou %bx\n", sobj_State));
 						// Time out
 						hdd_err_2_sense_data(ERROR_UA_NOT_READY);
 						usb_device_no_data();

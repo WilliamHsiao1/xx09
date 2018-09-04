@@ -189,7 +189,7 @@ u8 ata_ExecNoDataCmd(u8 command, u8 feature)
 \****************************************/
 u8 ata_ExecUSBNoDataCmd()
 {
-	DBG(("ata_ExecUSBNoDataCmd\n"));
+	//DBG(("ata_ExecUSBNoDataCmd\n"));
 
 
 	*ctxt_SataProto = PROT_ND << 4;
@@ -253,7 +253,7 @@ u8 ata_ReadID()  // could have argument - ATA/ATAPI , which ID command to use   
 
 	
 	// SATA0 --> CPU
-	DBG(("RdId\n"));
+	//DBG(("RdId\n"));
 	
 	*sata_CCMSITEINDEX = 0;		// 
 	scm_site = 0;
@@ -505,7 +505,7 @@ void ata_set_usb_msc()
 	{
 		if (sobj_qdepth >= MIN_SATA_Q_DEPTH)
 		{
-			DBG(("sobj_qdepth %BX\n", sobj_qdepth));
+			//DBG(("sobj_qdepth %BX\n", sobj_qdepth));
 			tmp8 = (tmp8 & ~SAT_CMD)  | SATA_NCQ_CMD;
 		}
 	}
@@ -538,25 +538,25 @@ bit ata_init()
 	{	// support NCQ
 		sobj_ncq_mode = 1;
 		sobj_qdepth = (mc_buffer[75 * 2] & 0x1F);
-		DBG(("QDEP %BX\n",sobj_qdepth));
+		//DBG(("QDEP %BX\n",sobj_qdepth));
 	}
 	else
     {
 		sobj_ncq_mode = 0;
 		sobj_qdepth = 1;
-		DBG(("no NCQ\n"));
+		//DBG(("no NCQ\n"));
     }
 #else
 	sobj_qdepth = (mc_buffer[75 * 2] & 0x1F);
 	if ((mc_buffer[76 * 2 + 1] & 0x01) && (sobj_qdepth > 1))
 	{	// support NCQ
-		DBG0(("QDEP %BX\n",sobj_qdepth));
+		//DBG0(("QDEP %BX\n",sobj_qdepth));
 	}
 	else
     {
 		sobj_qdepth = 1;
 		sobj_ncq_mode = 0;
-		DBG(("no NCQ\n"));
+		//DBG(("no NCQ\n"));
     }
 #endif
 	sata_set_cfree();
@@ -604,7 +604,7 @@ bit ata_init()
 #ifdef SUPPORT_3T_4K
 	if (sobj_sectorLBA_h)
 	{
-DBG(("> 2T\n"));
+//DBG(("> 2T\n"));
 	
 		sobj_sector_4K = 1;
 	}
@@ -759,7 +759,7 @@ bit ata_fast_enum_init()
 	}
 	else
 	{
-		DBG0(("NO_DEV\n"));
+		//DBG0(("NO_DEV\n"));
 		sobj_State = SATA_NO_DEV;
 		usb_active = 0;
 		return 1;

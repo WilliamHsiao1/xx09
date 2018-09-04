@@ -79,7 +79,7 @@ void timer0_unload()
 //----------------------------------------------------------------------
 void timer0_setup()
 {
-	DBG(("Timer 0 setup: "));
+	//DBG(("Timer 0 setup: "));
 
 	TR0 = 0;	//disable timer 0
 		
@@ -91,7 +91,7 @@ void timer0_setup()
 
 	TH0 = TH0_VALUE;
 	TL0 = TL0_VALUE;
-	DBG(("%BX, %BX\n", TH0, TL0));
+	//DBG(("%BX, %BX\n", TH0, TL0));
 	
 
 	TF0 = 0;	//claer timer flag

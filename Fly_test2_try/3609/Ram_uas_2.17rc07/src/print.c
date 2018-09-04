@@ -457,7 +457,7 @@ u8 StrToU8(u8 ch[])
 #ifdef DEBUG_DP
 void dump_reg()
 {
-	DBG(("-----------------------------\n"));
+	//DBG(("-----------------------------\n"));
 	
 #if 0
 	*usb_USB3StateSelect = 0x00;

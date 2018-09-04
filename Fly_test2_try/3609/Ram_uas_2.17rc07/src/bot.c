@@ -262,7 +262,7 @@ void bot_device_data_in()
 #endif
 
 
-//			DBG("ok\n");
+            //DBG("ok\n");
 			return;
 		}
 		else
@@ -346,7 +346,7 @@ void bot_device_data_out()
 		else
 		{	// Ho
 			// USB Data Out
-			DBG(("bot_device_data_out\n"));
+			//DBG(("bot_device_data_out\n"));
 
 			SCTXT_Status = CTXT_STATUS_PENDING;
 			if (cbwbyteCnt == byteCnt)
@@ -394,7 +394,7 @@ void bot_device_data_out()
 void bot_usb_bus_reset()
 {
 
-	DBG(("bot_usb_bus_reset\n"));
+	//DBG(("bot_usb_bus_reset\n"));
 	usbMode = CONNECT_UNKNOWN;				
 
 	*usb_Msc0IntStatus_0 = 0xFF;	//MSC_TX_DONE_INT|MSC_RX_DONE_INT|BOT_RST_INT|MSC_DIN_HALT_INT|MSC_DOUT_HALT_INT;
@@ -491,7 +491,7 @@ void usb_bot()
 	*usb_DeadTimeout_0 = 0;
 	*usb_DeadTimeout_1 = 0;
 
-	DBG0(("BOT %bx\n", sobj_State));
+	//DBG0(("BOT %bx\n", sobj_State));
 	if(usbMode == CONNECT_USB3)
 	{
 		*usb_DevCtrl_1 = USB2_FORCE_SUSP;
@@ -520,7 +520,7 @@ begin:
 	#ifdef BOT_TOUT
 		if (timerExpire == 1 )
 		{
-			DBG0(("BOT_TOUT\n"));
+			//DBG0(("BOT_TOUT\n"));
 			spi_phy_wr_retry(PHY_SPI_U3PCS, PCS_PHY_DIGIAL_13, HW_RESTART_USB2_ENABLE);
 			dump_reg();
 			*usb_DevCtrlClr_0 = USB_ENUM;
@@ -579,7 +579,7 @@ begin:
 						*cpu_wakeup_ctrl_0 = CPU_USB_SUSPENDED|CPU_USB_UNSUSPENED;
 						*usb_IntStatus_0 = USB_SUSPEND;
 						
-						DBG(("\tRes\n"));
+						//DBG(("\tRes\n"));
 
 						goto begin;
 					}			
@@ -634,7 +634,7 @@ begin:
 					usb3_u2_enable = 0;
 					usb3_function_suspend = 0;
 					usb3_device_U2_state = 0;
-					DBG0(("CMgr_St 0\n"));
+					//DBG0(("CMgr_St 0\n"));
 				#ifdef HW_CAL_SSC
 					//start_HW_cal_SSC = 1;
 				#endif
@@ -762,7 +762,7 @@ begin:
 								}
 #endif
 
-								DBG(("CBW Err Rec rst\n"));
+								//DBG(("CBW Err Rec rst\n"));
 								return;
 							}
 							
@@ -785,7 +785,7 @@ begin:
 							//if (*usb_IntStatus & VBUS_OFF)
 							if (USB_VBUS_OFF())
 							{
-								DBG(("V off\n"));
+								//DBG(("V off\n"));
 
 								usb_active = 0;
 								//bot_usb_bus_reset();
@@ -863,14 +863,14 @@ start_scsi_cmd:
 					//*usb_IntStatus	= CDB_AVAIL_INT;
 					if (cfa_active)
 					{
-						DBG(("???\n"));
+						//DBG(("???\n"));
 
 						//*ctxt_Next = CTXT_NULL;
 						hdd_StartAtaNoMediaCmd();
 					}
 					else
 					{
-						MSG(("Cmd: %BX\n", CmdBlk(0)));
+						//MSG(("Cmd: %BX\n", CmdBlk(0)));
 						DBG(("switch! William 2\n"));
 						switch (CmdBlk(0))
 						{
@@ -903,7 +903,7 @@ start_scsi_cmd:
 								// case 1 (Hn = Dn), case 4 (Hi > Dn), or case 9 (Ho > Dn)
 								if ((tmp8 & 0x12) || (val & 0x02))
 								{
-								    DBG(("CASE1 CASE4 CASE9\n"));
+								    //DBG(("CASE1 CASE4 CASE9\n"));
 									//CTXT_Status = CTXT_STATUS_GOOD;
 									usb_device_no_data();
 									break;
@@ -911,7 +911,7 @@ start_scsi_cmd:
 								// check case 2 (Hn < Di), case 7 (Hi < Di), or case 10 (Ho <> Di)
 								if ((tmp8 & 0x84) || (val & 0x04))
 								{
-								    DBG(("CASE2 CASE7 CASE10\n"));
+								    //DBG(("CASE2 CASE7 CASE10\n"));
 									//*ctxt_Status = CTXT_STATUS_PHASE;			// phase Error
 									SCTXT_Status = CTXT_STATUS_PHASE;			// phase Error
 									bot_device_no_data();
@@ -920,11 +920,11 @@ start_scsi_cmd:
 
 
 								// case 5 (Hi > Di) or case  6(Hi = Di)
-								DBG(("----Read CASE5 CASE6----\n"));
+								//DBG(("----Read CASE5 CASE6----\n"));
 #ifdef DBG_FUNCTION
 								if (sobj_State < SATA_READY)
 								{
-									DBG0(("RD %bx %bx\n", sobj_State, sobj_State_tout));
+									//DBG0(("RD %bx %bx\n", sobj_State, sobj_State_tout));
 								}
 #endif
 
@@ -978,7 +978,7 @@ start_scsi_cmd:
 								DBG(("SCSI_Write ! William 4\n"));
 								if (*ctxt_SatFailReason & (SAT_UNKNOWN_CDB|SAT_LBA_OVRN|SAT_LBA_ERR|SAT_SECCNT_ERR))
 								{
-									DBG(("Bad Wr cmd %bx\n", *ctxt_SatFailReason));
+									//DBG(("Bad Wr cmd %bx\n", *ctxt_SatFailReason));
 									//*ctxt_Next = CTXT_NULL;
 									hdd_err_2_sense_data(ERROR_ILL_CDB);
 									usb_device_no_data();
@@ -992,7 +992,7 @@ start_scsi_cmd:
 								// case 1 (Hn = Dn), case 4 (Hi < Dn), or case 9 (Ho > Dn)
 								if ((tmp8 & 0x12) || (val & 0x02))
 								{
-								    DBG(("Write CASE1 CASE4 CASE9\n"));
+								    //DBG(("Write CASE1 CASE4 CASE9\n"));
 									//SCTXT_Status = CTXT_STATUS_GOOD;
 									bot_device_no_data();
 									break;
@@ -1001,7 +1001,7 @@ start_scsi_cmd:
 								// check check case 3(Hn < Do), 8(Hi <> DO), or case 13 (Ho < Do)
 								if ((*ctxt_PhaseCase_0 & 0x08) || (*ctxt_PhaseCase_1 & 0x21))
 								{
-								    DBG(("Write CASE3 CASE8 CASE13\n"));
+								   // DBG(("Write CASE3 CASE8 CASE13\n"));
 									//*ctxt_Status = CTXT_STATUS_PHASE;			// CSW status
 									SCTXT_Status = CTXT_STATUS_PHASE;			// CSW status
 									bot_device_no_data();
@@ -1010,7 +1010,7 @@ start_scsi_cmd:
 								// case 11(Ho > Do) & case 12(Ho = Do)
 								//if (sobj_State < SATA_READY)
 								//	DBG0(("WR %bx\n", sobj_State));
-                                DBG(("---Write CASE11 CASE12---\n"));
+                                //DBG(("---Write CASE11 CASE12---\n"));
 #ifdef PWR_SAVING
 								if (sobj_State == SATA_PWR_DWN)
 								{
@@ -1099,15 +1099,15 @@ start_scsi_cmd:
 						recoveryFlag = 0;
 						if (CmdBlk(0) == 0x28)
 						{
-							DBG0(("RR "));
+							//DBG0(("RR "));
 						}
 						else if (CmdBlk(0) == 0x2A)
 						{
-							DBG0(("WR "));
+							//DBG0(("WR "));
 						}
 						else
 						{
-							DBG0(("R?%BX ", CmdBlk(0)));
+							//DBG0(("R?%BX ", CmdBlk(0)));
 						}
 					}
 				}
@@ -1121,7 +1121,7 @@ start_scsi_cmd:
 				// EP0_SETUP----------------
 				if (*usb_Ep0Ctrl & EP0_SETUP)
 				{	
-					DBG(("stp\n"));
+					//DBG(("stp\n"));
 					usb_control();
 				}
 				goto begin;
@@ -1140,7 +1140,7 @@ start_scsi_cmd:
 
 					*usb_Msc0IntStatus_0 = BOT_RST_INT;
 					bot_usb_bus_reset();
-					DBG(("Bulk RST:"));
+					//DBG(("Bulk RST:"));
 
 #if 0					
 	MSG(("usb_Msc0TxCtxt_0:%BX\n", *usb_Msc0TxCtxt_0));
@@ -1235,14 +1235,14 @@ start_scsi_cmd:
 			{
 				if (sobj_State > SATA_READY)
 				{
-					DBG(("S UPLUG\n"));
+					//DBG(("S UPLUG\n"));
 					sobj_State = SATA_RESETING;
 					usb_active = 0;
 					return;
 				}
 				else
 				{
-					DBG(("SPhy NR\n"));
+					//DBG(("SPhy NR\n"));
 					sata_Reset(SATA_HARD_RST);
 				}
 			}
@@ -1306,7 +1306,7 @@ start_scsi_cmd:
 #if 1
 					sobj_State = SATA_NO_DEV;
 
-					DBG0(("sobj_init_tout\n"));
+					//DBG0(("sobj_init_tout\n"));
 					usb_active = 0;
 					return;
 #else

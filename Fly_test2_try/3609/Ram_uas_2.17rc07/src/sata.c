@@ -339,7 +339,7 @@ void sata_abort_all_USBIO()
 	{	// select SCM
 		SCM_INDEX = scm_site;
 
-		DBG(("scm_site %BX %BX\n", scm_site, SCM_CdbIndex));
+		//DBG(("scm_site %BX %BX\n", scm_site, SCM_CdbIndex));
 		if (SCM_CdbIndex != CTXT_NULL)
 		{
 			*host_ctxtmem_ptr = SCM_CdbIndex;
@@ -490,7 +490,7 @@ void sata_exec_scm()
 	//DBG(("exec_scm: scm_site: %BX, segIndex: %BX, seg_INOUT: %BX\n", 
 	//scm_site, *sata_Ccm_SegIndex, *sata_Ccm_SegINOUT));
 	
-	DBG(("SI %BX\n\n", *sata_IntStatus_0));
+	//DBG(("SI %BX\n\n", *sata_IntStatus_0));
 	//*sata_EXQNINP = 0;
 	*sata_EXQNINP = scm_site;
 	*sata_Status = ATA_STATUS_BSY;
@@ -604,7 +604,7 @@ void sata_append_scm()
 void sata_exec_ncq_scm(u8 scm_site)
 {
 
-	DBG(("exec_ncq_scm %bx\n", scm_site));
+	//DBG(("exec_ncq_scm %bx\n", scm_site));
 	*sata_EXQNINP = scm_site;
 
 	//*sata_CCMSITEINDEX = scm_site;
@@ -627,7 +627,7 @@ void sata_append_ncq_scm(u8 scm_site)
 u8 data qScm;
 //#define qScm	tmp8
 	
-	DBG(("append_ncq_scm %bx\n", sobj_State));
+	//DBG(("append_ncq_scm %bx\n", sobj_State));
 	//SCM_Next = SCM_NULL;
 
 	if ((sobj_State == SATA_STANDBY) ||
@@ -720,7 +720,7 @@ void sata_exec_next_scm()
 			// SCM is aborted, so released it
 			sobj_cFree1.udata.u_8[scm_site >> 3] |= i2bit[scm_site & 0x07];
 
-			DBG0(("\tSCM %BX abted\n", scm_site));
+			//DBG0(("\tSCM %BX abted\n", scm_site));
 			// Get next SCM in Que
 			scm_site = sobj_ncq_que;
 	
@@ -732,14 +732,14 @@ void sata_exec_next_scm()
 #ifdef UAS_EN
 void sata_ncq_error_handling()
 {
-	DBG0(("NCQ Er\n"));
+	//DBG0(("NCQ Er\n"));
 	if 	(sobj_curScm != CCM_NULL)
 	{
 		SCM_INDEX = sobj_curScm;
 		sobj_curScm = CCM_NULL;
 		if(SCM_SegIndex != DBUF_SEG_NULL)
 		{
-DBG(("sNCQ E3 %BX\n", SCM_SegIndex));
+//DBG(("sNCQ E3 %BX\n", SCM_SegIndex));
 			DBUF_SegFree(SCM_SegIndex);
 			SCM_SegIndex = DBUF_SEG_NULL;
 		}
@@ -887,7 +887,7 @@ sata_isr_begin:
 					*dbuf_MuxInOut = (TX_DBUF_SATA0_R_PORT << 4) | TX_DBUF_NULL;
 				}
 				*dbuf_MuxCtrl = SEG_DONE;
-				DBG0(("SCM abted %BX\n", scm_site));
+				//DBG0(("SCM abted %BX\n", scm_site));
 			}
 			else
 			{	// vaid associated ctxt site
@@ -1040,7 +1040,7 @@ sata_isr_ncq_tr_done:
 				// Any releated USB CDB
 				if ((ctxt_site = SCM_CdbIndex) == CTXT_NULL)
 				{
-					DBG(("sata_isr: ctxt NULL in DATATXDONE\n"));
+					//DBG(("sata_isr: ctxt NULL in DATATXDONE\n"));
 					*sata_CurrTag = 0xFF;			//must reset CurrTag			
 					*sata_IntStatus_0 = DATATXDONE;		
 					sobj_curScm = SCM_NULL;
@@ -1066,7 +1066,7 @@ sata_isr_ncq_tr_done:
 
 				if (tmp8 | val)
 				{
-					DBG0(("sTS:%BX%BX %BX\n", val, tmp8, scm_site));
+					//DBG0(("sTS:%BX%BX %BX\n", val, tmp8, scm_site));
 					if (tmp8 & (DTXSYNCETX|DTXSYNCERX|DTXRERR))
 					{	// Data transmission completed with R_ERRp
 						hdd_err_2_sense_data(ERROR_CRC_ERROR);
@@ -1117,7 +1117,7 @@ sata_isr_ncq_tr_done:
 				SCTXT_CCMIndex = CCM_NULL;
 				if (SCTXT_Status == CTXT_STATUS_PHASE)
 				{	// 4.26
-					DBG(("Do un\n"));
+					//DBG(("Do un\n"));
 					hdd_err_2_sense_data(ERROR_IU_TOO_SHORT);
 					usb_rx_ctxt_send_status();
 
@@ -1220,7 +1220,7 @@ sata_isr_ncq_tr_done:
 			}	// 	if (sata_FISRCV0[0] == SET_DEVICE_BITS_FIS )
 			else
 			{
-				DBG0(("SDev %BX\n", *sata_Status));
+				//DBG0(("SDev %BX\n", *sata_Status));
 				if ((*sata_Status & ATA_STATUS_CHECK))
 				{
 					sata_ncq_error_handling();
@@ -1268,7 +1268,7 @@ sata_isr_ncq_tr_done:
 		// SATA non-NCQ command (Data-in) 
 		if ( sata_int_status_0 & RXDATARLSDONE )
 		{
-			DBG(("sata_isr: SATA_ACTIVE, RXDATARLSDONE\n"));
+			//DBG(("sata_isr: SATA_ACTIVE, RXDATARLSDONE\n"));
 #if 0			
 			if (*sata_DataRxStat_0)
 			{
@@ -1278,7 +1278,7 @@ sata_isr_ncq_tr_done:
 #ifdef DBG_ODD_U2
 			if (dbg_flag)
 			{
-				DBG0(("vSrxd\n"));
+				//DBG0(("vSrxd\n"));
 			}
 #endif	
 
@@ -1294,7 +1294,7 @@ sata_isr_ncq_tr_done:
 
 					SCM_SegIndex = DBUF_SEG_NULL;		
 				
-					DBG(("s_isr: SATA_ACTIVE, RXDATARLSDONE %BX\n", segIndex));
+					//DBG(("s_isr: SATA_ACTIVE, RXDATARLSDONE %BX\n", segIndex));
 					//DBG(("\t: SATA_ISR Port: %LX -> %LX, %LX -> %LX\n", 
 					//	dbuf_Port[5].dbuf_Port_Count, 
 					//	dbuf_Port[9].dbuf_Port_Count,
@@ -1323,10 +1323,10 @@ sata_isr_ncq_tr_done:
 				// wait for device is ready
 				if (tmp8 & ATA_STATUS_BSY)
 				{
-					DBG(("a Bsy"));
+					//DBG(("a Bsy"));
 					if (sata_FISRCV0[0] != DEVICE2HOST_FIS)
 					{	// D2HFIS is not received in FIS FIFO
-						DBG(("\n"));
+						//DBG(("\n"));
 						return;
 					}
 
@@ -1358,10 +1358,10 @@ sata_isr_ncq_tr_done:
 						}
 					}
 				#endif
-					DBG(("\taStat %BX\n", tmp8));
+					//DBG(("\taStat %BX\n", tmp8));
 				}
 
-				DBG(("sisr: SATA_ACTIVE, RXDATARLSDONE 1\n"));
+				//DBG(("sisr: SATA_ACTIVE, RXDATARLSDONE 1\n"));
 
 				if ( (ctxt_site = SCM_CdbIndex) == CTXT_NULL)
 				{
@@ -1379,7 +1379,7 @@ sata_isr_ncq_tr_done:
 				}
 				else
 				{	// SATA Command has associated USB Command
-					DBG(("sata_isr: SATA_ACTIVE, RXDATARLSDONE %BX\n", tmp8));
+					//DBG(("sata_isr: SATA_ACTIVE, RXDATARLSDONE %BX\n", tmp8));
 #ifdef UAS_EN // for UAS+BOT only
 					// break association from SCM to Ctxt
 					SCM_CdbIndex = CTXT_NULL;
@@ -1398,7 +1398,7 @@ sata_isr_ncq_tr_done:
 #ifdef DBG_ODD_U2
 						if (dbg_flag)
 						{
-							DBG0(("ckCond\n"));
+							//DBG0(("ckCond\n"));
 						}
 #endif	
 						ctxt_FIS[FIS_STATUS] = tmp8;
@@ -1447,15 +1447,15 @@ sata_isr_ncq_tr_done:
 #ifdef DBG_ODD_U2
 						if (dbg_flag)
 						{
-							DBG0(("vNotB2s %bx\n", tmp8));
+							//DBG0(("vNotB2s %bx\n", tmp8));
 							
 #if 1
-								DBG0(("uI:%BX%BX\n",  *usb_IntStatus_shadow_1, *usb_IntStatus_shadow_0));	
+								//DBG0(("uI:%BX%BX\n",  *usb_IntStatus_shadow_1, *usb_IntStatus_shadow_0));	
 							
-								DBG0(("mI:%BX%BX\n", *usb_Msc0IntStatus_1, *usb_Msc0IntStatus_0));
-								DBG0(("mTCt:%BX%BX\n", *usb_Msc0TxCtxt_1, *usb_Msc0TxCtxt_0));
-								DBG0(("mTXC:%BX%BX%BX\n", *usb_Msc0TxXferCount_2, *usb_Msc0TxXferCount_1, *usb_Msc0TxXferCount_0));
-								DBG0(("mTXBCNT:%BX%BX\n", *usb_Msc0_TXBCNT_1, *usb_Msc0_TXBCNT_0));
+								//DBG0(("mI:%BX%BX\n", *usb_Msc0IntStatus_1, *usb_Msc0IntStatus_0));
+								//DBG0(("mTCt:%BX%BX\n", *usb_Msc0TxCtxt_1, *usb_Msc0TxCtxt_0));
+								//DBG0(("mTXC:%BX%BX%BX\n", *usb_Msc0TxXferCount_2, *usb_Msc0TxXferCount_1, *usb_Msc0TxXferCount_0));
+								//DBG0(("mTXBCNT:%BX%BX\n", *usb_Msc0_TXBCNT_1, *usb_Msc0_TXBCNT_0));
 								//MSG(("mDICtr:%BX\n", *usb_Msc0DICtrlClr));
 								//MSG(("mDIXSt:%BX\n", *usb_Msc0DIXferStatus));
 								//MSG(("mDISt:%BX\n", *usb_Msc0DIStatus));
@@ -1580,7 +1580,7 @@ sata_isr_ncq_tr_done:
 								else	//if (SCTXT_Status == CTXT_STATUS_GOOD)
 								{
 #ifdef DBG_ODD_U2
-									DBG0(("B2S GOOD\n"));				
+									//DBG0(("B2S GOOD\n"));				
 #endif
 								
 									if (SCTXT_DbufIndex == DBUF_SEG_NULL)
@@ -1624,7 +1624,7 @@ sata_isr_ncq_tr_done:
 		// SATA non-NCQ command (Data-out) 
 		if ( sata_int_status_0 & DATATXDONE )
 		{
-			DBG(("<W %X>", *sata_DataTxStat_0));
+			//DBG(("<W %X>", *sata_DataTxStat_0));
 
 			if ((scm_site = sobj_curScm) != SCM_NULL)
 			{
@@ -1723,7 +1723,7 @@ sata_isr_ncq_tr_done:
 					//if (*ctxt_Status != CTXT_STATUS_XFER_DONE)
 					if (SCTXT_Status != CTXT_STATUS_XFER_DONE)
 					{
-						DBG(("wait USB rx done\n"));
+						//DBG(("wait USB rx done\n"));
 	#if 0					
 						dbuf_dbg(DIR_WRITE, 1);
 						ERR(("usb_IntStatus:%BX\n", *usb_IntStatus_shadow_0));
@@ -1752,7 +1752,7 @@ sata_isr_ncq_tr_done:
 				#if 1
 					if (tmp8 | val)
 					{
-						DBG0(("\tsTS:%BX%BX\n", val, tmp8));
+						//DBG0(("\tsTS:%BX%BX\n", val, tmp8));
 						hdd_err_2_sense_data(ERROR_CRC_ERROR);
 					}
 					else
@@ -1941,7 +1941,7 @@ sata_isr_ncq_tr_done:
 #if 1	//debug
 		if ( sata_int_status_0 & CMDTXERR )
 		{
-			DBG0(("CMDTXERR %bx\n", *sata_CTagXmtStat));
+			//DBG0(("CMDTXERR %bx\n", *sata_CTagXmtStat));
 			*sata_IntStatus_0 = CMDTXERR;
 
 			if ((scm_site = sobj_curScm) != SCM_NULL)
@@ -2063,7 +2063,7 @@ sata_isr_ncq_tr_done:
 			{
 				sata_get_class();
 				sobj_State = SATA_READY;
-				DBG0(("SAT R\n"));
+				//DBG0(("SAT R\n"));
 				// any pending SATA command ?
 				sata_exec_next_scm();
 			}
@@ -2075,7 +2075,7 @@ sata_isr_ncq_tr_done:
 					if ((tmp8 & ATA_STATUS_CHECK) == 0 )
 					{
 						sata_get_class();
-						DBG0(("DRDY\n"));
+						//DBG0(("DRDY\n"));
 						sobj_State = SATA_DRV_RDY;
 
 						//sobj_Timeout = 1;				// Enable SATA_DRV_RDY_TOUT
@@ -2172,7 +2172,7 @@ sata_isr_ncq_tr_done:
 		}
 	}
 #endif
-	DBG(("sata_isr done\n"));
+	//DBG(("sata_isr done\n"));
 }
 
 /**************************************************************\
@@ -2186,7 +2186,7 @@ sata_isr_ncq_tr_done:
 \*************************************************************/
 u8 sata_exec_internal_ccm()
 {
-	DBG(("SI "));
+	//DBG(("SI "));
 
 	//FIXME: assume always allocate TAG=0
 	//scm_site = 0;
@@ -2238,7 +2238,7 @@ u8 sata_exec_internal_ccm()
 		{
 			if (*sata_IntStatus_0 & DATATXDONE )
 			{
-				DBG(("sata_exec_ctxt: while, OUT done\n"));
+				//DBG(("sata_exec_ctxt: while, OUT done\n"));
 
 				*sata_IntStatus_0 = DATATXDONE;	
 #ifndef SATA_AUTO_FIFO_RST
@@ -2265,7 +2265,7 @@ u8 sata_exec_internal_ccm()
 #if 1
 		if (*sata_IntStatus_0 & CMDTXERR )
 		{
-			DBG0(("SI CMDTXERR %bx\n", *sata_CTagXmtStat));
+			//DBG0(("SI CMDTXERR %bx\n", *sata_CTagXmtStat));
 
 			*sata_IntStatus_0 = CMDTXERR;
 
@@ -2293,7 +2293,7 @@ u8 sata_exec_internal_ccm()
 				}
 #endif
 
-DBG0(("USB Rst %BX\n", tmp8));
+//DBG0(("USB Rst %BX\n", tmp8));
 #if 0
 	#ifdef UAS_EN
 				if (!bot_mode)
@@ -2319,7 +2319,7 @@ DBG0(("USB Rst %BX\n", tmp8));
 
 		if ((*sata_PhyStat & PHYRDY) == 0)
 		{
-			DBG0(("S unplug\n"));
+			//DBG0(("S unplug\n"));
 			return CCM_STATUS_ERROR;
 		}
 	}
@@ -2330,7 +2330,7 @@ DBG0(("USB Rst %BX\n", tmp8));
 	sata_return_tfr();
 
 	val = *sata_Status;
-	DBG(("icmd done %bx\n", val));
+	//DBG(("icmd done %bx\n", val));
 	
 	{
 		if (val & ATA_STATUS_CHECK)
@@ -2409,7 +2409,7 @@ u8 sata_exec_dmae_RW_ctxt()
 
 	hdd_start_act_led();
 
-	DBG(("\t %BX\n", *ctxt_No_Data));
+	//DBG(("\t %BX\n", *ctxt_No_Data));
 	SCTXT_Status = CTXT_STATUS_PENDING;
 	return CTXT_STATUS_PENDING;
 }
@@ -2443,7 +2443,7 @@ u8 sata_exec_ctxt()
 #endif
 	{
 		scm_site = 1;
-		DBG(("s_e_c %bx %bx %bx\n", SCTXT_Flag, SCTXT_DbufIndex, SCTXT_DbufINOUT));
+		//DBG(("s_e_c %bx %bx %bx\n", SCTXT_Flag, SCTXT_DbufIndex, SCTXT_DbufINOUT));
 	}
 	// Select CCM/SCM
 	*sata_CCMSITEINDEX = scm_site;
@@ -2510,7 +2510,7 @@ Input Global Parameter:
 u8 sata_exec_ncq_ctxt()
 {
 	scm_site = sata_AllocateSCM();
-	DBG(("alloc:%BX\n", scm_site));
+	//DBG(("alloc:%BX\n", scm_site));
 
 	if (scm_site == SCM_NULL)
 	{
@@ -2559,7 +2559,7 @@ u8 sata_exec_ncq_ctxt()
 	SCTXT_Status = CTXT_STATUS_PENDING;
 	SCTXT_LunStatus = LUN_STATUS_GOOD;
 
-	DBG(("site: %BX,\n", ctxt_site));
+	//DBG(("site: %BX,\n", ctxt_site));
 	return CTXT_STATUS_PENDING;
 }
 #endif
@@ -2569,7 +2569,7 @@ u8 sata_exec_ncq_ctxt()
 \****************************************/
 void sata_HardReset()
 {
-	DBG0(("s_Hst:%BX\n", sobj_State));
+	//DBG0(("s_Hst:%BX\n", sobj_State));
 
 	if (sobj_State > SATA_READY)
 	{
@@ -2683,7 +2683,7 @@ void sata_get_class()
 		{	// ATAPI device
 			sobj_class = DEVICECLASS_ATAPI;
 			DevicesFound = 1;
-			DBG(("Atapi\n"));
+			//DBG(("Atapi\n"));
 			return;
 		}
 		else if ((*sata_LbaM == 0x00) &&
@@ -2692,7 +2692,7 @@ void sata_get_class()
 			sobj_class = DEVICECLASS_ATA;
 			DevicesFound = 1;
 //								sata_init = 1;
-			DBG(("ATA\n"));
+			//DBG(("ATA\n"));
 			return;
 		}
 	}
@@ -2935,7 +2935,7 @@ void sata_RegInit()
 
 #if 1
 	tmp8 = spi_phy_rd(PHY_SPI_SATA, SATA_PHY_DIGIAL_0_1);
-	DBG0(("sata_RegInit %BX %BX\n", tmp8, *sata_PhyCtrl_3));
+	//DBG0(("sata_RegInit %BX %BX\n", tmp8, *sata_PhyCtrl_3));
 	spi_phy_wr_retry(PHY_SPI_SATA, SATA_PHY_DIGIAL_0_1, tmp8|PD_RX);
 
 	*sata_PhyCtrl_3 = PHYPWRUP;
@@ -3050,7 +3050,7 @@ void sata_pll_pwr_up()
 		uart_init();
 	#endif
 
-	DBG(("s_pl_on %BX\n", *cpu_Clock_2));
+	//DBG(("s_pl_on %BX\n", *cpu_Clock_2));
 
 	// restore SATA RX/TX Impendence
 	spi_phy_wr(PHY_SPI_SATA, 0x00, 0x48);
@@ -3063,7 +3063,7 @@ void sata_pll_pwr_up()
 
 void sata_pwr_up()
 {
-	DBG0(("s_pwr_up\n")); 
+	//DBG0(("s_pwr_up\n")); 
 #if 1
 	// Power on SATA HDD
 	//if (DrvPwrMgmt)
@@ -3103,7 +3103,7 @@ void sata_pwr_up()
 #ifdef PWR_SAVING
 void sata_pwr_down()
 {
-	DBG(("s_pwr_dn\n"));
+	//DBG(("s_pwr_dn\n"));
 	if ((*cpu_Clock_2 & SATA0_PLL_RDY) == 0)
 	{
 		return;

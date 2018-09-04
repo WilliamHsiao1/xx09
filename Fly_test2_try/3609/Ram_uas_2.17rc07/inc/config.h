@@ -99,7 +99,7 @@
 	//#define OS_DESC
 #endif
 
-//#define DBG_FUNCTION
+#define DBG_FUNCTION
 #ifdef DBG_FUNCTION
 	//#define DBG_ODD_U2
 	#define DEBUG

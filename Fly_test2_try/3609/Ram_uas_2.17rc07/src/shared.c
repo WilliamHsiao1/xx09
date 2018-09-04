@@ -215,7 +215,7 @@ void spi_phy_wr(u8 phy_type, u8 phy_reg, u8 write_value)
 	Delay10us(1);
 	if (*phy_spi_ctrl_3 & PHY_DONE)
 			return;
-	DBG(("\tSPI WR%BX\n", phy_reg));
+	//DBG(("\tSPI WR%BX\n", phy_reg));
 #else
    //wait for 50us
 	for(i8 = 10; i8 != 0; i8--)
@@ -251,7 +251,7 @@ u8 spi_phy_rd(u8 phy_type, u8 phy_reg)
 	Delay10us(1);
 	if ((*phy_spi_ctrl_3 & PHY_DONE) == 0)
 	{
-		DBG(("\tSPI RD%BX\n", phy_reg));
+		//DBG(("\tSPI RD%BX\n", phy_reg));
 	}
 	return 	*phy_spi_ctrl_0;
 #else

@@ -1,0 +1,132 @@
+;/******************************************************************************
+; *
+; *   Copyright (C) Initio Corporation 2004-2009, All Rights Reserved
+; *
+; *   This file contains confidential and propietary information
+; *   which is the property of Initio Corporation.
+; *
+; *
+; *******************************************************************************/
+
+$INCLUDE	(config.inc)
+
+	PUBLIC	localNvram
+
+;localNvram
+	CSEG  at	07C00h
+localNvram:
+	DB	025H, 0C9H												;0-1: 	Signature
+	DB	036H, 009H												;2-3		ChipID
+	DB	039H, 040H												;4-5:	ModelId
+	DB	000H, 000H, 000H, 000H									;6-9:	1394 GUID
+	DB	000H, 000H, 000H, 000H									;A-D:
+	;-------------FIRMWARE CONTROL----
+	DB	020H, 000H												;0e-0f	Firmware control Flags
+	DB	001H													;10 
+	DB	'Rock'													;11-14		
+	DB  000H, 000H												;15-16	reserved
+	DB  008H									  				;17		vendorStrLength
+	DB	'Initio          '										;18-27
+	DB	000h													;28
+	DB	FW_VERSION_0, FW_VERSION_1								;29-2A	fwVersion
+	DB	000H, 000H												;2B:2C  Rsved(2D=idle time defined in xxbta.nvr)
+	DB  078H													;2D		sataHddIdleTime
+	DB	003H													;2E		powerManagement
+	DB	008h													;2F		modelStrLength
+	DB	'Exteral         '										;30-3F	modelText
+	DB	'              '										;40-4D
+	DB	000h, 000h												;4E-4F
+	DB	IO_MODE_0, IO_MODE_1									;50-51	ioMode
+	DB	000H, 000H, 000H										;52-54	reserved
+	DB	001H													;55		USB3 bMaxPower
+	DB	0C0H													;56		USB bmAttributes
+	db	001H													;56		USB2 bMaxPower
+	DB  013H, 0FDH												;58-59 USB Vendor ID
+	DB	FW_ID_0, FW_ID_1										;5A-5B USB Product ID
+	DB  030H, 030H, 030H, 030H									;5C-5F iSerial[20]
+	DB	030H, 030H, 030h, 030h, 030h, 030h, 030h, 030h			;60-67
+	DB	000h, 000h,	000h, 000h, 000h, 000h, 000h, 000h			;68-6F
+	
+	DB  000H, 000H, 000H, 000H, 000H, 000H, 000H, 000H			;70-77
+	DB  000H, 000H, 000H, 000H, 000H, 000H, 000H, 000H			;78-7F
+	
+	DB  03CH													;80		standbyTimer0
+	DB  000H, 000H, 0BH, 0B8H									;81-84	standbyTimer32 
+	DB	000H, 000H												;85-86 
+	DB	000H													;87		op_param_mode
+	DB  000H, 000H, 000H, 000H, 000H, 000H, 000H, 000H			;88-8F
+	DB  000H, 000H, 000H, 000H, 000H, 000H, 000H, 000H			;90-97
+	DB  000H, 000H, 000H, 000H 									;98-9B
+	DB	002H													;9C	led0Status
+	DB	002H													;9D	led1Status
+	DB	000H, 000H												;9E-9F
+	DB  000H, 000H, 000H, 000H, 000H, 000H, 000H, 000H			;A0-A7
+	DB  000H, 000H, 000H, 000H, 000H, 000H, 000H, 000H			;A8-AF
+	DB  000H, 000H, 000H, 000H, 000H, 000H, 000H, 000H			;B0-B7
+	DB  000H, 000H, 000H, 000H, 000H, 000H, 000H, 000H			;B8-BF
+	DB  000H, 000H, 000H, 000H, 000H, 000H, 000H, 000H			;C0-C7
+	DB  000H, 000H, 000H, 000H, 000H, 000H, 000H, 000H			;C8-CF
+	DB  000H, 000H, 000H, 000H, 000H, 000H, 000H, 000H			;D0-D7
+	DB  000H, 000H, 000H, 000H, 000H, 000H, 000H, 000H			;D8-DF
+	DB  000H, 000H, 000H, 000H, 000H, 000H, 000H, 000H			;E0-E7
+	DB  000H, 000H, 000H, 000H, 000H, 000H, 000H, 000H			;E8-EF
+	DB  000H, 000H, 000H, 000H, 000H, 000H, 000H, 000H			;F0-F7
+	DB  000H, 000H, 000H, 000H, 000H, 000H, 000H, 000H			;F8-FF			       
+
+	DB  000H, 000H, 000H, 000H, 000H, 000H, 000H, 000H	;100-107
+	DB	000H, 000H,	000H, 000H,	000H, 000H,	000H, 000H	;108-10F
+	DB	000H, 000H,	000H, 000H,	000H, 000H,	000H, 000H	;110-117
+	DB	000H, 000H,	000H, 000H,	000H, 000H,	000H, 000H	;118-11F
+	DB	000H, 000H,	000H, 000H,	000H, 000H,	000H, 000H	;120-127
+	DB	000H, 000H,	000H, 000H,	000H, 000H,	000H, 000H	;128-12F
+	DB	000H, 000H,	000H, 000H,	000H, 000H,	000H, 000H	;130-137
+	DB	000H, 000H,	000H, 000H,	000H, 000H,	000H, 000H	;138-13F
+	DB	000H, 000H,	000H, 000H,	000H, 000H,	000H, 000H	;140-147
+	DB	000H, 000H,	000H, 000H,	000H, 000H,	000H, 000H	;148-14F
+	DB	000H, 000H,	000H, 000H,	000H, 000H,	000H, 000H	;150-157
+	DB	000H, 000H,	000H, 000H,	000H, 000H,	000H, 000H	;158-15F
+	DB  000H, 000H, 000H, 000H, 000H, 000H, 000H, 000H	;160-167
+	DB	000H, 000H,	000H, 000H,	000H, 000H,	000H, 000H	;168-16F
+	DB	000H, 000H,	000H, 000H,	000H, 000H,	000H, 000H	;170-177
+	DB	000H, 000H,	000H, 000H,	000H, 000H,	000H, 000H	;178-17F
+	DB	000H, 000H,	000H, 000H,	000H, 000H,	000H, 000H	;180-187
+	DB	000H, 000H,	000H, 000H,	000H, 000H,	000H, 000H	;188-18F
+	DB	000H, 000H,	000H, 000H,	000H, 000H,	000H, 000H	;190-197
+	DB	000H, 000H,	000H, 000H,	000H, 000H,	000H, 000H	;198-19F
+	DB	000H, 000H,	000H, 000H,	000H, 000H,	000H, 000H	;1A0-1A7
+	DB	000H, 000H,	000H, 000H,	000H, 000H,	000H, 000H	;1A8-1AF
+	DB	000H, 000H,	000H, 000H,	000H, 000H,	000H, 000H	;1B0-1B7
+	DB	000H, 000H,	000H, 000H,	000H, 000H,	000H, 000H	;1B8-1BF
+	DB	000H, 000H,	000H, 000H,	000H, 000H,	000H, 000H	;1C0-1C7
+	DB	000H, 000H,	000H, 000H,	000H, 000H,	000H, 000H	;1C8-1CF
+	DB	000H, 000H,	000H, 000H,	000H, 000H,	000H, 000H	;1D0-1D7
+	DB	000H, 000H,	000H, 000H,	000H, 000H,	000H, 000H	;1D8-1DF
+	DB	000H, 000H,	000H, 000H,	000H, 000H,	000H, 000H	;1E0-1E7
+	DB	000H, 000H,	000H, 000H,	000H, 000H,	000H, 000H	;1E8-1EF
+	DB	000H, 000H,	000H, 000H,	000H, 000H,	000H, 000H	;1F0-1F7
+	DB	000H, 000H,	000H, 000H,	000H, 000H,	000H, 000H	;1F8-1FF
+	
+;FIXME: why mark it?
+;?PR?ljmp_bootstrap?funcs	SEGMENT	CODE
+
+;PUBLIC ljmp_bootstrap
+
+;RSEG  ?PR?ljmp_bootstrap?funcs
+;USING	0
+
+;ljmp_bootstrap:
+;	db	02h, 083h, 0E0h		; long jump to 8000h
+
+
+;?PR?ljmp_0000?funcs	SEGMENT	CODE
+
+;PUBLIC ljmp_0000
+
+;RSEG  ?PR?ljmp_0000?funcs
+;USING	0
+
+;ljmp_0000:
+;	db	02h, 000h, 0		; long jump to 0000h
+
+	END
+

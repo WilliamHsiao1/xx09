@@ -859,7 +859,6 @@ begin:
 
 
 start_scsi_cmd:
-                    DBG(("\nSCSI Start! William 1\n"));
 					//*usb_IntStatus	= CDB_AVAIL_INT;
 					if (cfa_active)
 					{
@@ -871,7 +870,6 @@ start_scsi_cmd:
 					else
 					{
 						//MSG(("Cmd: %BX\n", CmdBlk(0)));
-						DBG(("switch! William 2\n"));
 						switch (CmdBlk(0))
 						{
 						
@@ -883,7 +881,6 @@ start_scsi_cmd:
 								/****************************************\
 								 SCSI_READ Commands
 								\****************************************/
-								DBG(("SCSI_READ ! William 3\n"));
 								if (*ctxt_SatFailReason & (SAT_LBA_OVRN|SAT_LBA_ERR|SAT_SECCNT_ERR))
 								{
 									//ERR(("Bad Rd cmd %bx\n", *ctxt_SatFailReason));
@@ -975,7 +972,6 @@ start_scsi_cmd:
 								/****************************************\
 								 SCSI_WRITE Commands
 								\****************************************/
-								DBG(("SCSI_Write ! William 4\n"));
 								if (*ctxt_SatFailReason & (SAT_UNKNOWN_CDB|SAT_LBA_OVRN|SAT_LBA_ERR|SAT_SECCNT_ERR))
 								{
 									//DBG(("Bad Wr cmd %bx\n", *ctxt_SatFailReason));

@@ -1302,43 +1302,37 @@ void hdd_rd_buffer_cmd()
 				}
 			}
 #endif
-#ifdef  WRITE_BUFFER_TEST
-        if(             (CmdBlk(1) == 0x01)&&   //MODE = WRITE DATA
+#ifdef  WRITE_BUFFER_TEST //write command 3B 01 00 22 33 44 00 00 01 00
+        if(             (CmdBlk(1) == 0x01)&& //MODE = Vendor Specific
                         (CmdBlk(2) == 0x00)&& //BUFFER ID= 0
-                        (CmdBlk(3) == 0x00)&& //BUFFER OFFSET[2] = 0
-                        (CmdBlk(4) == 0x00)&& //BUFFER OFFSET[1] = 0
-                        (CmdBlk(5) == 0x01)&& //BUFFER OFFSET[0] = 1
-                        (CmdBlk(6) == 0x00) //PARAMETER LIST LENGTH[2] = 0
-            )
+                        (CmdBlk(3) == 0x22)&& //BUFFER OFFSET[2] = 0
+                        (CmdBlk(4) == 0x33)&& //BUFFER OFFSET[1] = 0
+                        (CmdBlk(5) == 0x44) //BUFFER OFFSET[0] = 1
+          )
          {
-            DBG(("~READ WRITE_BUFFER_TEST\n"));
-            //INITIO_Hello
-            WRITE_BLOCK(INITIO_Hello, ((u8 *)(mc_buffer + 1)), 13);
-            
-            mc_buffer[0] = globalNvram.test_version;
-            byteCnt = 14;
-            usb_device_data_in();
-            return;
+            DBG(("~11 22 33 44READ WRITE_BUFFER_TEST\n"));
+            DBG(("read CmdBlk(8) = %x CmdBlk(7) = %x CmdBlk(6) = %x\n",*((u16*)(&CmdBlk[8])),CmdBlk(7),CmdBlk(6)));
+            //byteCnt = *((u8 *)(&CmdBlk[8]));//+*((u16 *)(&CmdBlk[7]));
+            byteCnt = Min(1024, *((u16 *)(&CmdBlk[8]))+*((u16 *)(&CmdBlk[7])));
+            DBG((" read byteCnt = %x CmdBlk[8] = %x (CmdBlk[7]<<2) = %x\n",byteCnt,CmdBlk[8],(CmdBlk[7]<<2) ));
          }
          else if(       (CmdBlk(1) == 0x01)&&   //MODE = WRITE DATA
                         (CmdBlk(2) == 0x00)&& //BUFFER ID= 0
                         (CmdBlk(3) == 0x00)&& //BUFFER OFFSET[2] = 0
                         (CmdBlk(4) == 0x01)&& //BUFFER OFFSET[1] = 0
-                        (CmdBlk(5) == 0x00)&& //BUFFER OFFSET[0] = 1
-                        (CmdBlk(6) == 0x00) //PARAMETER LIST LENGTH[2] = 0
+                        (CmdBlk(5) == 0x00) //BUFFER OFFSET[0] = 1
                  )
          {  //Hello William
-            xmemset(mc_buffer, globalNvram.test_version2, 15);
+            //xmemset(mc_buffer, globalNvram.test_version2, 15);
 
             WRITE_BLOCK(INITIO_bin_liao, ((u8 *)(mc_buffer + 16)), 15);
-            //byteCnt = 14;
-            //byteCnt = 8;
             byteCnt = 30;
-            usb_device_data_in();
-            return;
+            
          }
+         usb_device_data_in();
+         return;         
 #endif
-			
+
 		}
 
 		hdd_err_2_sense_data(ERROR_ILL_CDB);
@@ -1587,7 +1581,6 @@ void hdd_StartAtaNoMediaCmd()
 	case SCSI_WRITE16:
 	//case SCSI_READ12:
 	//case SCSI_WRITE12:
-	DBG(("SCSI Command William!\n"));
 		hdd_err_2_sense_data(ERROR_UA_NO_MEDIA);
 		usb_device_no_data();
 		return;
@@ -2558,26 +2551,27 @@ _verify10:
 #endif
 
 #ifdef  WRITE_BUFFER_TEST
-            byteCnt = *((u16 *)(&CmdBlk(7)))+*((u16 *)(&CmdBlk(8)));
 
+            byteCnt = Min(1024, *((u16 *)(&CmdBlk[8]))+*((u16 *)(&CmdBlk[7])));
             if (byteCnt == 0)
             {   // PARAMETER LIST LENGTH is zero
-                globalNvram.test_version = 0x00;
-                globalNvram.test_version2 = 0x00;
+                //globalNvram.test_version = 0x00;
+               // globalNvram.test_version2 = 0x00;
                 usb_device_no_data();
                 return;
             }
             if(         (CmdBlk(1) == 0x01)&& //MODE = Vendor specific
-                        (CmdBlk(2) == 0x00)&& //BUFFER ID= 0
-                        (CmdBlk(3) == 0x00)&& //BUFFER OFFSET[2] = 0
-                        (CmdBlk(4) == 0x00)&& //BUFFER OFFSET[1] = 0
-                        (CmdBlk(5) == 0x01)&& //BUFFER OFFSET[0] = 1
-                        (CmdBlk(6) == 0x00)   //PARAMETER LIST LENGTH[2] = 0
+                        (CmdBlk(2) == 0x11)&& //BUFFER ID= 0
+                        (CmdBlk(3) == 0x22)&& //BUFFER OFFSET[2] = 0
+                        (CmdBlk(4) == 0x33)&& //BUFFER OFFSET[1] = 0
+                        (CmdBlk(5) == 0x44) //BUFFER OFFSET[0] = 1
+                        &&(CmdBlk(6) == 0x00)   //PARAMETER LIST LENGTH[2] = 0
                         )
             {
                 DBG(("~Write data\n"));
-                globalNvram.test_version = 0x01;
+                //globalNvram.test_version = 0x01;
                 //WRITE_BLOCK(INITIO_Hello, ((u8 *)(mc_buffer)), 13);
+                //WRITE_BLOCK(((u16 *)(mc_buffer)), ((u16 *)(mc_buffer)), byteCnt);
                 usb_device_data_out();
                 return;
             }
@@ -2585,12 +2579,12 @@ _verify10:
                         (CmdBlk(2) == 0x00)&& //BUFFER ID= 0
                         (CmdBlk(3) == 0x00)&& //BUFFER OFFSET[2] = 0
                         (CmdBlk(4) == 0x01)&& //BUFFER OFFSET[1] = 0
-                        (CmdBlk(5) == 0x00)&& //BUFFER OFFSET[0] = 1
-                        (CmdBlk(6) == 0x00)   //PARAMETER LIST LENGTH[2] = 0
+                        (CmdBlk(5) == 0x00) //BUFFER OFFSET[0] = 1
+                        &&(CmdBlk(6) == 0x00)   //PARAMETER LIST LENGTH[2] = 0
 
                     )
                 {
-                    globalNvram.test_version2 = 0x02;
+                    //globalNvram.test_version2 = 0x02;
                     usb_device_data_out();
                     return;
                 }
@@ -3020,7 +3014,6 @@ void hdd_post_data_out()
 		SCSI_WRITE_BUFFER10
 	\****************************************/
 	case SCSI_WRITE_BUFFER10:   //
-	DBG(("William!!!SCSI_WRITE_BUFFER10\n"));
 
 #ifdef SCSI_DOWNLOAD_FW	
 		if ((CmdBlk(1) == 0x5) && 

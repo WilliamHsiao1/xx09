@@ -64,8 +64,6 @@ typedef struct _NVRAM {
 	u8	USB_PID[2];					//5A-5B
 	u8	iSerial[20];				//5C-6F
 	u8 	reserved70[0x7F - 0x70 + 1]; // 70-7F
-	u8  test_version;   //write_buffer_test
-	u8  test_version2;   //write_buffer_test
 
 }NVRAM, *PNVRAM;
 

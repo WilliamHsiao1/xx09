@@ -2336,7 +2336,7 @@ start_scsi_cmd:
 						CmdBlk(13) = ctxt_CDB[13];
 						CmdBlk(14) = ctxt_CDB[14];
 						CmdBlk(15) = ctxt_CDB[15];
-
+                        
 						hdd_StartAtaCmd();
 				}	// switch (pCtxt->CTXT_CDB[0])
 				//*usb_IntStatus_1 = CDB_AVAIL_INT|MSC0_INT;

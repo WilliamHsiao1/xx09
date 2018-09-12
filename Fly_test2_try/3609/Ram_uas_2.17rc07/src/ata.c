@@ -568,7 +568,7 @@ bit ata_init()
 		//sobj_deviceType= DEVICETYPE_HD_ATA6;
 		COPYU32_REV_ENDIAN_X2D(mc_buffer + 100 * 2, &sobj_sectorLBA_l);
 		COPYU32_REV_ENDIAN_X2D(mc_buffer + 102 * 2, &sobj_sectorLBA_h);
-//DBG(("Cap %LX %LX\n", sobj_sectorLBA_h, sobj_sectorLBA_l));
+DBG(("Cap %LX %LX\n", sobj_sectorLBA_h, sobj_sectorLBA_l));
 	}
 	else
 	{

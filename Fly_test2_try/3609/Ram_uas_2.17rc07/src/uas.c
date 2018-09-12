@@ -2101,6 +2101,7 @@ start_scsi_cmd:
 					case SCSI_READ10:
 					case SCSI_READ12:
 					case SCSI_READ16:
+                    //case SCSI_READ_BUFFER10:
 					{
 						/****************************************\
 						 SCSI_READ Commands
@@ -2207,6 +2208,7 @@ start_scsi_cmd:
 					case SCSI_WRITE10:
 					case SCSI_WRITE12:
 					case SCSI_WRITE16:
+                    //case SCSI_WRITE_BUFFER10:
 					{
 						/****************************************\
 						 SCSI_WRITE Commands

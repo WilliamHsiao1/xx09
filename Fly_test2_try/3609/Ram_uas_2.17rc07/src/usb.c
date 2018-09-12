@@ -549,6 +549,30 @@ void usb_device_data_out()
 
 }
 
+void usb_device_data_out2()
+{
+	//printf("data out %X\n", byteCnt);
+	SCTXT_CCMIndex = SCM_NULL;
+
+	if (byteCnt > MC_BUFFER_SIZE2)
+	{	// fails  
+		hdd_err_2_sense_data(ERROR_ILL_CDB);
+		usb_device_no_data();
+		return;
+	}
+#ifdef UAS_EN
+	if (!bot_mode)
+	{
+		uas_device_data_out();
+	}
+	else
+#endif
+	{
+		bot_device_data_out();
+	}
+
+}
+
 #if 0
 void usb_set_halt_if_dout_flow_ctrl()
 {

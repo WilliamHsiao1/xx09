@@ -149,7 +149,10 @@ Ex u8	xdata usb_PortID1;
 Ex u8	xdata usb_PortID2;
 
 #define MC_BUFFER_SIZE				512
+#define MC_BUFFER_SIZE2				1024
+
 extern u8   xdata mc_buffer[MC_BUFFER_SIZE];
+extern u8   xdata mc_buffer2[MC_BUFFER_SIZE2];
 
 
 #define DIRECTION_NONE				0

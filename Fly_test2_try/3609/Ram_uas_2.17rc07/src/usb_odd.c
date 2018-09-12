@@ -656,6 +656,15 @@ odd_write:
 			#endif
 						}
 					}
+                    /*else if(    (CmdBlk(1) == 0x01)&& //MODE = Vendor Specific
+                                (CmdBlk(2) == 0x00)&& //BUFFER ID= 0
+                                (CmdBlk(3) == 0x22)&& //BUFFER OFFSET[2] = 0
+                                (CmdBlk(4) == 0x33)&& //BUFFER OFFSET[1] = 0
+                                (CmdBlk(5) == 0x44)   //BUFFER OFFSET[0] = 1
+                            )
+                    {
+                         goto begin;   
+                    }*/
 				}
 #ifdef SCSI_DOWNLOAD_FW
 				else if(CmdBlk(0) == SCSI_WRITE_BUFFER10)

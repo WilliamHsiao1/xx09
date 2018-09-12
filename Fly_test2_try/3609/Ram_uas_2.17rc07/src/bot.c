@@ -167,7 +167,7 @@ void bot_device_data_in()
 {
 
 	//DBG(("bot d_in\n"));
-	DBG0(("~byteCnt = %x \n",byteCnt));
+	
 	if (byteCnt==0)
 	{	// Dn
 		bot_device_no_data();
@@ -205,7 +205,7 @@ void bot_device_data_in()
 #else
 			*dbuf_MuxInOut = (TX_DBUF_USB_R_PORT << 4) | TX_DBUF_CPU_W_PORT;
 #endif
-            DBG0(("~byteCnt = %x\n",byteCnt));
+            
 			sz16 = byteCnt;
 #ifdef USB2_DI_PATCH	// USB2.0 patch
 			if (usbMode == CONNECT_USB2)
@@ -877,6 +877,7 @@ start_scsi_cmd:
 							case SCSI_READ10:
 							case SCSI_READ12:
 							case SCSI_READ16:
+                            //case SCSI_READ_BUFFER10:
 							{
 								/****************************************\
 								 SCSI_READ Commands
@@ -960,6 +961,7 @@ start_scsi_cmd:
 						case SCSI_WRITE10:
 						case SCSI_WRITE12:
 						case SCSI_WRITE16:
+                        //case SCSI_WRITE_BUFFER10:
 							{	
 						#ifdef W_PROTECT
 								if(writeprotect == 1)
